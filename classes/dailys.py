@@ -3,7 +3,6 @@ import os #Used for normalizing pyton strings like folders wich use "/" in folde
 import ConfigParser # Config parser class (.cfg files)
 import time #Time module , used for sleeping
 import random #used to randomise numbers and get a random number between a range 
-#import sqllink # Sql link used to connect to the sql database
 
 
 class dailys:
@@ -27,14 +26,14 @@ class dailys:
         
 
         #Dailys times  fruit_on
-        self.bagatelletime = self.settingsmanager.getvalue("Dailys","lastbagatelletime")        
-        self.lasttombtime = self.settingsmanager.getvalue("Dailys","lasttombtime") 
-        self.lastocotime = self.settingsmanager.getvalue("Dailys","lastcocotime") 
-        self.lastshrinetime = self.settingsmanager.getvalue("Dailys","lastshrinetime") 
-        self.tombolatime = self.settingsmanager.getvalue("Dailys","lasttombolatime")           
-        self.last_fruittime = self.settingsmanager.getvalue("Dailys","lastfruittime")   
-        self.last_anchortime = self.settingsmanager.getvalue("Dailys","lastanchortime")
-        self.lastnowagertime =  self.settingsmanager.getvalue("Dailys","lastsnowagertime")
+        self.bagatelletime = self.settingsmanager.getvalue("timecache","lastbagatelletime")        
+        self.lasttombtime = self.settingsmanager.getvalue("timecache","lasttombtime") 
+        self.lastocotime = self.settingsmanager.getvalue("timecache","lastcocotime") 
+        self.lastshrinetime = self.settingsmanager.getvalue("timecache","lastshrinetime") 
+        self.tombolatime = self.settingsmanager.getvalue("timecache","lasttombolatime")           
+        self.last_fruittime = self.settingsmanager.getvalue("timecache","lastfruittime")   
+        self.last_anchortime = self.settingsmanager.getvalue("timecache","lastanchortime")
+        self.lastnowagertime =  self.settingsmanager.getvalue("timecache","lastsnowagertime")
 
 
 
@@ -163,7 +162,7 @@ class dailys:
                 runone=1
                 
                 self.lastnowagertime = time.time()
-                self.settingsmanager.setvalue("Dailys","lastsnowagertime" , self.lastnowagertime )
+                self.settingsmanager.setvalue("timecache","lastsnowagertime" , self.lastnowagertime )
                 return runone
         if self.anchoron  == "on":  
             if (runone == 0):
@@ -172,7 +171,7 @@ class dailys:
 
                     self.process_anchor()
                     self.last_anchortime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lastanchortime" , self.last_anchortime )
+                    self.settingsmanager.setvalue("timecache","lastanchortime" , self.last_anchortime )
                     runone=1
                     return runone
 
@@ -182,7 +181,7 @@ class dailys:
                     self.process_tombola()
                     
                     self.tombolatime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lasttombolatime" , self.tombolatime )
+                    self.settingsmanager.setvalue("timecache","lasttombolatime" , self.tombolatime )
                     runone=1
         if self.fruiton  == "on":  
             if (runone == 0):
@@ -191,7 +190,7 @@ class dailys:
                     self.process_fruitmachine()
                   #  print "Dailys Class - Processing Anchor Management"
                     self.last_fruittime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lastfruittime" , self.last_fruittime )
+                    self.settingsmanager.setvalue("timecache","lastfruittime" , self.last_fruittime )
                     runone=1
                     return runone
                 
@@ -202,7 +201,7 @@ class dailys:
                     self.process_shrine()
                   
                     self.lastshrinetime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lastshrinetime" , self.lastshrinetime )
+                    self.settingsmanager.setvalue("timecache","lastshrinetime" , self.lastshrinetime )
                     runone=1
                     return runone
 
@@ -213,7 +212,7 @@ class dailys:
                     self.cocoloop()
                   
                     self.lastocotime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lastcocotime" , self.lastocotime )
+                    self.settingsmanager.setvalue("timecache","lastcocotime" , self.lastocotime )
                     runone=1
                     return runone
                 
@@ -224,7 +223,7 @@ class dailys:
                     self.process_tomb()
                   
                     self.lasttombtime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lasttombtime" , self.lasttombtime )
+                    self.settingsmanager.setvalue("timecache","lasttombtime" , self.lasttombtime )
                     runone=1
                     return runone 
 
@@ -235,7 +234,7 @@ class dailys:
                     self.process_bagatelle()
                   
                     self.bagatelletime = time.time()
-                    self.settingsmanager.setvalue("Dailys","lastbagatelletime" , self.bagatelletime )
+                    self.settingsmanager.setvalue("timecache","lastbagatelletime" , self.bagatelletime )
                     runone=1
                     return runone 
                 
