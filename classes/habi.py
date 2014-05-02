@@ -21,7 +21,7 @@
 #Import Needed Classes:
 import ConfigParser # Config parser class (.cfg files)
 import time #Time module , used for sleeping
-import random #used to randomise numbers and get a random number between a range 
+import random #used to randomise numbers and get a random number between a range
 from pyamf.remoting.client import RemotingService #Pyamf class used for amf request (slightly edited)
 
 
@@ -38,9 +38,9 @@ class habi:
     #Get amf service and update cookie after #Bugfix id 001 since reclass , fuck knows whats going on with this shite. but this rusty fix works for now
         self.gateway.opener = self.theopener
         theret= self.gateway.getService(servicename) #Get The service
-        
+
         return theret
-            
+
 
 
 
@@ -49,7 +49,7 @@ class habi:
 
     #Initialize this class
     #def __init__(self,acc):
-    
+
     def __init__(self,acc,thegateway):
         self.lastexp = 0
 
@@ -58,7 +58,7 @@ class habi:
         self.gateway = thegateway
         self.LAST_GEM_CHECK_TIME = 1
         print "init-------------"
-             
+
     def counthouses(self):
         #print "findNest"
         housecount=0
@@ -84,8 +84,8 @@ class habi:
 
 
         print "searching for p3/building upgrades.."
-        
-        ret = 0 # return 0 if none done 
+
+        ret = 0 # return 0 if none done
         upgradeservice = self.amfgetservice("UpgradeService")
 
         pollencount = self.resp3['resources']['pollen']
@@ -115,19 +115,19 @@ class habi:
             if x["m_id"] == 11: #soldier level 1 upgrades
                 got_soldier_lvl_1_upgrade = 1
 
-                
 
 
-        
+
+
         if playerlevel > 10:# dont even waste my cpu if no upgrades available for this level (11+ for upgrades)
           #  print "searching p3 upgrades"
 
             for x in  self.itemcollection:
-                
+
 
 
 ###################################### level 1 workers
-                if got_worker_lvl_1_upgrade == 0:  #only if we havent got all       
+                if got_worker_lvl_1_upgrade == 0:  #only if we havent got all
                     if (x['sceneItemType'] == "Character"):
                         #print x
                         if (x['unlockLevel']) == 1: #set to 1 if upgrade is available that made things easier eh? :D
@@ -140,12 +140,12 @@ class habi:
                                             print "Upgraded workers from level 1 to level 2"
                                             #print pollencount
 
-                                            
+
                                             upgradeservice.buyUpgrade("1",str(upgradeid))
                                             return 1
 
 ###################################### level 1 nester
-                if got_nester_lvl_1_upgrade == 0:  #only if we havent got all       
+                if got_nester_lvl_1_upgrade == 0:  #only if we havent got all
                     if (x['sceneItemType'] == "Character"):
                         #print x
                         if (x['unlockLevel']) == 1: #set to 1 if upgrade is available that made things easier eh? :D
@@ -158,7 +158,7 @@ class habi:
                                             print "Upgraded nesters from level 1 to level 2"
                                             #print pollencount
 
-                                            
+
                                             upgradeservice.buyUpgrade("6",str(upgradeid))
                                             return 1
 
@@ -182,7 +182,7 @@ class habi:
                                                 print "Upgraded nesters from level 2 to level 3"
                                                 #print pollencount
 
-                                                
+
                                                 upgradeservice.buyUpgrade("7",str(upgradeid))
                                                 return 1
 
@@ -204,7 +204,7 @@ class habi:
                                                 print "Upgraded soldiers from level 2 to level 3"
                                                 #print pollencount
 
-                                                
+
                                                 upgradeservice.buyUpgrade("11",str(upgradeid))
                                                 return 1
 
@@ -235,19 +235,19 @@ class habi:
                                                 print "Upgraded workers from level 2 to level 3"
                                                 #print pollencount
 
-                                                
+
                                                 upgradeservice.buyUpgrade("2",str(upgradeid))
                                                 return 1
 
 
 
-                                         
+
 ###Now check on buildings...
                 if playerlevel > 12:# dont even waste my cpu if no upgrades available for this level (13+ for building upgrades)
                    # print "checking building upgrades"
 
                 #level 1 house....
-           
+
                     if (x['sceneItemType'] == 'Structure'):
                         if (x['type'] == 'House'):
                             upgradeid =x['m_id']
@@ -278,7 +278,7 @@ class habi:
 
                 if playerlevel > 17:
                 #level 1 nest....
-               
+
                     if (x['sceneItemType'] == 'Structure'):
                         if (x['type'] == 'Nest'):
                             upgradeid =x['m_id']
@@ -287,14 +287,14 @@ class habi:
                                 if (mudcount > 850):
                                     if (stonecount > 1050):
                                         if (woodcount > 800):
-                                            
+
                                             print "Upgraded Nest id " + str(upgradeid) + " to level 2"
                                             upgradeservice.buyUpgrade("22",str(upgradeid))
                                             return 1
 
                 if playerlevel > 40:
                 #level 1 nest....
-               
+
                     if (x['sceneItemType'] == 'Structure'):
                         if (x['type'] == 'Nest'):
                             upgradeid =x['m_id']
@@ -303,10 +303,10 @@ class habi:
                                 if (mudcount > 900):
                                     if (stonecount > 950):
                                         if (woodcount > 1300):
-                                            
+
                                             print "Upgraded Nest id " + str(upgradeid) + " to level 3"
                                             upgradeservice.buyUpgrade("23",str(upgradeid))
-                                            return 1      
+                                            return 1
 
  ###################################
 
@@ -324,8 +324,8 @@ class habi:
                                             return 1
 
 
-     ###################################    
-        
+     ###################################
+
     def countnest(self):
         #print "findNest"
         housecount=0
@@ -383,7 +383,7 @@ class habi:
 
             if (x['sceneItemType'] == "Structure"):
                 if (x['decayLevel'] > 1): #Buildings have a heath and a decay level only use decay levels in this ver , its better this way
-                    
+
                     buildid=x['m_id']
                     #print x
                     badx = self.getbuildingx(buildid)
@@ -398,7 +398,7 @@ class habi:
                             self.scene_service.moveItem(str(builderid),str(badx),str(bady))
                             print "set creature " + str(builderid) + " to fix unhealthy building at x = " + str(badx) + " y = " + str(bady)
                             return doneone
-                #if (x['isBuilt'] == True):       
+                #if (x['isBuilt'] == True):
         return doneone
 
     def findinvhouse(self):
@@ -429,17 +429,17 @@ class habi:
                    # print x
                     if (x['sceneItemType'] == "Structure"):
                         if (x['isBuilt'] == True):
-                            item1id  = x['m_id']   
-                            
+                            item1id  = x['m_id']
+
        #     if (x['x'] == "9"):
        #         if (x['y'] == "7"):
        #             if (x['sceneItemType'] == "Structure"):
        #                 if (x['isBuilt'] == True):
-       #                     item1id  = x['m_id']                             
+       #                     item1id  = x['m_id']
         if item1id > 0:
             print "Removed completed dummy build item"
             self.Inventory_Service.moveToItemBag(str(item1id))
-            
+
 
 
 
@@ -529,11 +529,11 @@ class habi:
 
 
 
-        
+
         else:
             print "Get fix coord failed for " + str(thex) + " , " + str(they) +  ". Please report this. Unless you have edited the predefined map. If so then you need to add a build point for your new coord to this function!"
-            
-        
+
+
 
 
 
@@ -546,7 +546,7 @@ class habi:
         doneone=0
         buildid = self.findnonecompletebuilding()
 
-        
+
         if not buildid ==-1:
 
             badx = self.getbuildingx(buildid)
@@ -574,7 +574,7 @@ class habi:
         #So if we have 6 items , we know we need to build the 7th in our premap list next. This will fix buildings stacking ontop of eachover.
         #Also will decrease cpu usage
         buildingcount =  self.countbuildings()
-        
+
         if buildingcount == 0:
             print "No buildings found , Building item 1 (Storage) at coordinate 1,0"
             buildid = self.findinvstorage()
@@ -726,7 +726,7 @@ class habi:
                 self.scene_service.moveItem(str(buildid),str(9),str(5)) #Move the item onto the map
 
 
-     
+
 
     def getlowestresource(self):
         print "Finding lowest resource"
@@ -734,39 +734,39 @@ class habi:
         lowestres= "none"
         lowestres = 0
 
-        self.woodcount = self.resp3['resources']['wood']      
+        self.woodcount = self.resp3['resources']['wood']
         # print "wood = " + str(woodcount)
         lowestrescount = self.woodcount
         lowestres= "wood"
 
-        self.mudcount = self.resp3['resources']['mud']      
+        self.mudcount = self.resp3['resources']['mud']
         # print "mud = " + str(mudcount)
         if ( self.mudcount < lowestrescount):
             lowestrescount = self.mudcount
-            lowestres= "mud"     
+            lowestres= "mud"
 
-        self.grasscount = self.resp3['resources']['grass']      
+        self.grasscount = self.resp3['resources']['grass']
         # print "grass = " + str(grasscount)
         if ( self.grasscount < lowestrescount):
             lowestrescount = self.grasscount
             lowestres= "grass"
 
-      
-        self.pollencount = self.resp3['resources']['pollen']      
+
+        self.pollencount = self.resp3['resources']['pollen']
     # print "pollen = " + str(pollencount)
         if ( self.pollencount  < lowestrescount):
             lowestrescount = self.pollencount
             lowestres= "pollen"
 
-      
-        self.stonecount = self.resp3['resources']['stone']      
+
+        self.stonecount = self.resp3['resources']['stone']
     #print "stone = " + str(stonecount)
         if ( self.stonecount < lowestrescount):
             lowestrescount = self.stonecount
             lowestres= "stone"
 
-      
-        self.watercount = self.resp3['resources']['water']      
+
+        self.watercount = self.resp3['resources']['water']
     #print "water = " + str(watercount)
 
         if ( self.watercount < lowestrescount):
@@ -776,7 +776,7 @@ class habi:
 
         return lowestres
 
-    
+
     def checktennants(self,searchid):
        for x in self.itemcollection:
           if (x['sceneItemType'] == "Character"):
@@ -785,30 +785,30 @@ class habi:
                 maxrest= x['maxAttributes']['rest']
                 if (int(x['hunger']) == int(maxhunger)) and (int(x['rest']) == int(maxrest)):
                    print "Moving fully healthy creature id#" + str(x['m_id']) + " out of house id#" + str(searchid['m_id'])
-                   #print "id=" + str(x['m_id']) + "x=" + str(x['x']) + "y=" + str(x['y'] ) 
+                   #print "id=" + str(x['m_id']) + "x=" + str(x['x']) + "y=" + str(x['y'] )
                    self.scene_service.moveItem(str(x['m_id']),str(8),str(8))
 
-            
+
 
     def checkhouses(self):
           #print itemcollection
           for y in self.itemcollection:
 
-                   self.checktennants(y)        
+                   self.checktennants(y)
 
     def findemptyhouse(self):
       # print "finding empty house.."
        #print itemcollection
-       
+
        for y in self.itemcollection:
-          
+
           if (y['sceneItemType'] == 'Structure'):
              if (y['type'] == 'House'):
                 maxchars=y['characterCapacity']
                 tencount= self.findhousetenantcount(y['m_id'])
                 #print maxchars + "vs" + tencount
                 if (int(tencount) < int(maxchars)):
-                   
+
                    #space available here so put pet into house
                    #print "putting pet into house"
 
@@ -828,15 +828,15 @@ class habi:
     def checkhungry(self):
        print "hungry check"
 
-       
+
        currentmon =""
        for x in self.itemcollection:
           if (x['sceneItemType'] == "Character"):
              if  (int(x['tenantOf']) == -1): #Not in a house already or already nesting
-                   
+
                 #print x
                 if (int(x['hunger']) < 50) or (int(x['rest']) < 50):
-                  
+
                   #print "test"
                    #Check pet hunger and put them in available house
                   currentmon = x
@@ -845,19 +845,19 @@ class habi:
                      currhouse=[]
                      #print "loop"
                      currhouse=self.findemptyhouse()
-                    
+
                      if not (currhouse == None):
                         #print "true"
                        result = self.scene_service.makeTenant((str(currentmon['m_id'])),str(currhouse['m_id']))
 
-                  #      print currentmon 
+                  #      print currentmon
                        if (result == True):
                            #
                            print "Placed creature id#" + str(currentmon['m_id']) + " in house id#" + str(currhouse['m_id'])
                            #print "Placed creature in house"
                        break
 
-                
+
     def setworkercollect(self,cid,lowestres):
         if (lowestres == "wood"):
             print str(cid) + " Is now colleting wood"
@@ -876,7 +876,7 @@ class habi:
             self.scene_service.moveItem(str(cid),"1","0")
         elif (lowestres == "water"):
             print str(cid) + " Is now colleting water"
-            self.scene_service.moveItem(str(cid),"3","3")             
+            self.scene_service.moveItem(str(cid),"3","3")
         else:
             print "fix needed no tile found for " + lowestres
 
@@ -885,10 +885,10 @@ class habi:
           #if (resmname.lower() == lowestres):
           #   resx = x['x']
           #   resy = x['y']
-        
 
 
-             
+
+
              #emptytile = self.findemptytilearound(resx,resy)
                          #scene_service.moveItem(str(x['m_id']),"3","9") ##collect wood
              #if (emptytile): #Empty tile found
@@ -910,7 +910,7 @@ class habi:
     def findemptytilearound(self,thex,they):
    #Find a empty tile next to a certain tile , used to move creatures next to items ect
    #Checks tile to left , to right , above and below could be improved with diagnal but not really needed
-       foundone = []   
+       foundone = []
        for x in self.tilecollection:
           #print x
 
@@ -938,19 +938,19 @@ class habi:
              #print searchx
           #print str( x['x'])
           if(x['x'] == int(searchx)):
-             
+
              if(x['y'] == int(searchy)):
-                  
+
                   if(x['walkable'] == True):
-                      
+
                       if self.itemexistat(searchx,searchy) == False:
-                          
+
                           foundone = [searchx,searchy]
                           return foundone
                           break
 
 
-          
+
           searchx = int(thex)
           searchy = int(they) -1
             # print "searchx = " + searchx + "searchy = " + searchy
@@ -960,15 +960,15 @@ class habi:
           if(x['x'] == int(searchx)):
              #print x
              if(x['y'] == int(searchy)):
-                  #print "rdd" 
+                  #print "rdd"
                   #print self.itemexistat(searchx,searchy)
                   if(x['walkable'] == True):
                       if self.itemexistat(searchx,searchy) == False:
                           foundone = [searchx,searchy]
                           return foundone
                           break
-                   
-       
+
+
           searchx = int(thex)
           searchy = int(they)+1
             # print "searchx = " + searchx + "searchy = " + searchy
@@ -988,21 +988,21 @@ class habi:
        return foundone
 
 
-        
+
     def getbuildingx(self,buildingid):
        #Get building X coord (should be updated to single function for both coords)
        for x in self.itemcollection:
           if (x['sceneItemType'] == "Structure"):
              if (x['m_id'] == buildingid):
                 return (x['x'])
-          
+
     def getbuildingy(self,buildingid):
        #Get building Y coord (should be updated to single function for both coords)
        for x in self.itemcollection:
           if (x['sceneItemType'] == "Structure"):
              if (x['m_id'] == buildingid):
                 return (x['y'])
-        
+
     def findlowhpbuilding(self):
        theret=-1
        for x in self.itemcollection:
@@ -1013,7 +1013,7 @@ class habi:
                    theret=(x['m_id'])
                    return theret
                    break
-         
+
        return theret
 
     def countpets(self):
@@ -1026,16 +1026,17 @@ class habi:
 
 
     def checkeggs50(self,playerlevel):
-        
+
        print "Searching for any eggs on stage (level 50 logic)..."
        for x in self.itemcollection:
          # print x['sceneItemType']
           petcount= self.countpets()
           maxpetcount = self.resp['maxPopulation']
-          if (x['profession'] == "soldier"):
-             self.scene_service.discardEgg(str(x['m_id']))#Egg is a soldier , #discard
-             print "Discarded Useless Egg id#" + str(x['m_id'])
-             return 1 #Kill func              
+          if (x['sceneItemType'] == "Egg"):
+              if (x['profession'] == "soldier"):
+                 self.scene_service.discardEgg(str(x['m_id']))#Egg is a soldier , #discard
+                 print "Discarded Useless Egg id#" + str(x['m_id'])
+                 return 1 #Kill func
           if (x['sceneItemType'] == "Egg"):
              #print x['profession']
              if not (x['species'] == None):
@@ -1049,7 +1050,7 @@ class habi:
                         print "Not enough nest on stage to justify another nester , discarded egg"
                         self.scene_service.discardEgg(str(x['m_id'])) # Population = max so discard
                         return 0
-              
+
                nestercount=(self.countnesters()) #Get total nester , premap only has 13 nest , so if we have more than this the nesters are useless to us
                if (x['profession'] == "nester"): #Only if egg is a worker
                   if (nestercount < 5): #Keep 5 nesters alive for repopulating when others die , any less than 3 is pretty damn slow to repopulate  is my preference
@@ -1059,12 +1060,12 @@ class habi:
 
 
 
-                
+
                if (x['profession'] == "worker"): #Only if egg is a worker
                      if (petcount < maxpetcount): #If we dont have full capacity population....
                              (self.scene_service.hatchEgg(str(x['m_id'])))#Hatch the egg
-                             print "Hatched Egg id#" + str(x['m_id']) + " (" + x['profession'] + ")" 
-                             return 1 #Kill func    
+                             print "Hatched Egg id#" + str(x['m_id']) + " (" + x['profession'] + ")"
+                             return 1 #Kill func
                      else:
                              self.scene_service.discardEgg(str(x['m_id'])) # Population = max so discard
                              print "Discarded Egg id#" + str(x['m_id']) + " due to full population"
@@ -1079,7 +1080,7 @@ class habi:
 
 
     def checkeggs(self,playerlevel):
-        
+
        print "Searching for any eggs on stage..."
        for x in self.itemcollection:
 
@@ -1091,7 +1092,7 @@ class habi:
                  if (x['profession'] == "soldier"):
                      self.scene_service.discardEgg(str(x['m_id']))#Egg is a soldier , #discard
                      print "Discarded Useless Egg id#" + str(x['m_id'])
-                     return 1 #Kill func 
+                     return 1 #Kill func
                  if (x['profession'] == "nester"): #Only if egg is not a soldier....
 
                      nestercount=(self.countnesters()) #Get total nester , premap only has 13 nest , so if we have more than this the nesters are useless to us
@@ -1102,18 +1103,18 @@ class habi:
 
 
 
-                            
+
                  if not(x['profession'] == "soldier"): #Only if egg is not a soldier....
                      if (petcount < maxpetcount): #If we dont have full capacity population....
                          (self.scene_service.hatchEgg(str(x['m_id'])))#Hatch the egg
-                         print "Hatched Egg id#" + str(x['m_id']) + " (" + x['profession'] + ")" 
+                         print "Hatched Egg id#" + str(x['m_id']) + " (" + x['profession'] + ")"
                          return 0
 
 
-                     
+
                      else:
 
-                         
+
                          self.scene_service.discardEgg(str(x['m_id'])) # Population = max so discard
 
                          print "Discarded Egg id#" + str(x['m_id']) + " due to full population"
@@ -1125,15 +1126,15 @@ class habi:
     def checknesters(self):
 
        for x in self.itemcollection:
-          
+
           if (x['sceneItemType'] == "Character"):
-             
+
              if  (str(x['profession']) == "nester"):
-                
+
                 if (int(x['tenantOf'] == -1)): #Nester is not busy
 
 
-                                
+
                     if (int(x['hunger']) > 50) and (int(x['rest']) > 50):
                         nestid= self.finemptynest()
 
@@ -1149,7 +1150,7 @@ class habi:
           if (x['sceneItemType'] == 'Structure'):
 
              if (x['type'] == 'Nest'):
-                 
+
 
                 if (str(x['isBuilt']) == 'True'):
                     if (int(x['health']) > 50):
@@ -1158,7 +1159,7 @@ class habi:
 
                        if (tencount == 0):
                           ret = x['m_id']
-       return ret         
+       return ret
 
 
 
@@ -1173,7 +1174,7 @@ class habi:
                 theret=(x['m_id'])
                 return theret
                 break
-             
+
        return theret
 
 
@@ -1182,7 +1183,7 @@ class habi:
        for x in self.itemcollection:
 
           if (x['sceneItemType'] == "Gem"):
-            
+
              if str((self.scene_service.collectGem(str(x['m_id']))) == "True"):
                 print "Collected gem id#" + str(x['m_id'])
 
@@ -1221,7 +1222,7 @@ class habi:
                 self.store_service.buyItem("20")
                 self.theopener = self.gateway.opener
                 self.gateway.opener = self.theopener
-                print "speant some resources"        
+                print "speant some resources"
 
     def speandresources(self):
         #print self.countnest()
@@ -1235,7 +1236,7 @@ class habi:
                 if self.mudcount > 6000:
                    if self.stonecount > 6000:
                       if self.woodcount > 6000:
-                          
+
                           if self.countnest() < 1:
                               #We have less than 1 nest in inventory so buy new nest
                               self.store_service.buyItem("22")
@@ -1249,20 +1250,20 @@ class habi:
                               self.store_service.buyItem("20")
 
     def findnonebusypet(self):
-        theid=-1 
+        theid=-1
         for x in  self.itemcollection:
-                    
+
             if (x['sceneItemType'] == "Character"):
                 if  (x['tenantOf'] == -1):
                     theid=x['m_id']
-                            
+
         return theid
 
 
     def findnonebusyworker(self):
-        theid=-1 
+        theid=-1
         for x in  self.itemcollection:
-                    
+
             if (x['sceneItemType'] == "Character"):
              if  (x['profession'] == "worker"):
                 #print "1"
@@ -1270,23 +1271,23 @@ class habi:
                     #print "2"
                     if (x['health'] > 50):
                         theid=x['m_id']
-                            
+
         return theid
 
     def countnesters(self):
         ret = 0
         for x in  self.itemcollection:
-            
-                    
+
+
             if (x['sceneItemType'] == "Character"):
-             if  (x['profession'] == "nester"):        
+             if  (x['profession'] == "nester"):
                 ret = ret+1
         return ret
-    
+
     def findnonebusyworker2(self):
-        theid=-1 
+        theid=-1
         for x in  self.itemcollection:
-                    
+
             if (x['sceneItemType'] == "Character"):
              if  (x['profession'] == "worker"):
                 #print "1"
@@ -1296,7 +1297,7 @@ class habi:
                         if (x['attachedTo'] == -1):
                             theid=x['m_id']
                             #print x
-                            
+
         return theid
     def checknonebuiltbuildings(self):
         doneone=0
@@ -1309,18 +1310,18 @@ class habi:
 
           #print "x=" + badx +  "y=" + bady
           emptytile = self.findemptytilearound(badx,bady)
-         
+
           builderid = self.findnonebusyworker2()
 
 
 
 
-          
+
           if (emptytile): #Empty tile found
              # print "builderid=" + str(builderid)
               if  builderid > -1:
 
-    
+
                   doneone=1
                   self.scene_service.moveItem(str(builderid),str(emptytile[0]),str(emptytile[1]))
                   print "set creature to fix build unbuilt structure at x = " + str(emptytile[0]) + " y = " + str(emptytile[1])
@@ -1328,7 +1329,7 @@ class habi:
 
 
 
-        
+
     def checkworkers(self):
         workerid=self.findnonebusyworker2()
         doneone=0
@@ -1340,13 +1341,13 @@ class habi:
 
                 print "lowest res = " + lowestres
                 self.setworkercollect(workerid,lowestres)
-                         
+
     def DoLoop(self):
     # try:
 
 
 
-       self.gateway.opener = self.theopener     
+       self.gateway.opener = self.theopener
        self.player_service = self.amfgetservice("PlayerService")
        self.event_service = self.amfgetservice("EventService")
        self.scene_service = self.amfgetservice("SceneService")
@@ -1355,7 +1356,7 @@ class habi:
        playerlevel =self.resp['habitariumLevel']
 
 
-       
+
        #Detect a brand new player and set them up , stops the user needing to do it manually
        if int(self.resp['isSetup']) == 0:
            print "New habi detected , sending setup packet...."
@@ -1367,7 +1368,7 @@ class habi:
            self.player_service.setTutorialProgress("-1")
            print "Sending Update..."
            self.event_service.update('40','40')
-               
+
            print "resetting player"
            self.player_service.reset()
            print "choosing a new habi"
@@ -1380,29 +1381,29 @@ class habi:
            time.sleep(2)
            self.checkgems()
            self.event_service.update('40','40')
-           self.store_service.buyItem("15") 
+           self.store_service.buyItem("15")
            temp= self.event_service.simulate()
 
-           
+
            return 1
 
 
-                  
 
 
 
-              
+
+
        self.itemcollection= self.scene_service.sceneItems()
-       self.resp2= self.event_service.simulate() 
+       self.resp2= self.event_service.simulate()
        self.tilecollection = self.resp2['map']['tiles']
        self.resp3= self.event_service.update('40','40')
-       
+
        self.itembag = self.Inventory_Service.itemBag()
 
-       
+
        maxxp=self.resp2['player']['levelInfo']['nextXP']
-       thisexp =   self.resp2['player']['xp']  - self.lastexp 
-       print "Tick - " + str(self.resp['neoUsername']) + " | Level=" + str(self.resp['habitariumLevel']) + "| +exp = " +  str(thisexp) + "| total exp = " + str(self.resp2['player']['xp']) + "/" + str(maxxp) 
+       thisexp =   self.resp2['player']['xp']  - self.lastexp
+       print "Tick - " + str(self.resp['neoUsername']) + " | Level=" + str(self.resp['habitariumLevel']) + "| +exp = " +  str(thisexp) + "| total exp = " + str(self.resp2['player']['xp']) + "/" + str(maxxp)
        self.lastexp = self.resp2['player']['xp']
        if (self.resp2['player']['xp'] > maxxp):
           print "leveled up sending next level gains"
@@ -1422,25 +1423,25 @@ class habi:
        self.checkupgrades(playerlevel) # Check for upgrades based on current player level.
 
 
-                 
+
 
 
 
          #Egg check delayed:
        if (time.time() - float(self.LAST_EGG_CHECK_TIME) > 120): #2 mins
            self.LAST_EGG_CHECK_TIME = time.time() #Update time
-           self.checkinveggs() 
+           self.checkinveggs()
 
            if int(playerlevel) == 50:
                self.checkeggs50(playerlevel) #Special logic if we are 50 , we want to filter out soldiers and nesters now
-           else:           
+           else:
                self.checkeggs(playerlevel) #Check for eggs/discard(+200exp them)
          #Gem check delayed:
        if (time.time() - float(self.LAST_GEM_CHECK_TIME) > 120): #2 mins
            self.LAST_GEM_CHECK_TIME = time.time() #Update time
            self.checkgems() #Check for any gems and collect them
 
-     
+
 
 
 
@@ -1449,5 +1450,5 @@ class habi:
 
 
     # except:
-    
+
    #     time.sleep(10)

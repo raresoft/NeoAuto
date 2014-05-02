@@ -4,7 +4,7 @@
 #Import Needed Classes:
 import ConfigParser # Config parser class (.cfg files)
 import time #Time module , used for sleeping
-import random #used to randomise numbers and get a random number between a range 
+import random #used to randomise numbers and get a random number between a range
 
 from NeoAccount import NeoAccount
 #Setup Default vars / classes
@@ -16,7 +16,7 @@ confighandler = ConfigParser.RawConfigParser() #Used for .cfg files
 
 #Begin Class
 class InventoryManager:
-    
+
 
     #Initialize this class
     def __init__(self,acc,settigsfile,settingsmanager ):
@@ -26,29 +26,29 @@ class InventoryManager:
         self.filterlist = []
         self.filterlist = self.fetchfilterlist(settigsfile)
         self.lastsdbticktime = self.settingsmanager.getvalue("timecache","lastsdbtime")
-        
+
     def checktick(self):
         #Checks if a sdb tick is needed
         doneone=0
         if (time.time() - float(self.lastsdbticktime) > 3600): #SdbTime (1 hour checks)
-            
-            
+
+
             self.lastsdbticktime = time.time()
             self.settingsmanager.setvalue("timecache","lastsdbtime" , self.lastsdbticktime )
             self.Depositall()
             doneone=1
         return doneone
 
-    
+
     def getrawfilterlist(self):
         #Just returns the filter list array
 
         return self.filterlist
-    
 
-        
+
+
     def fetchfilterlist(self,thefolder):
-        print str(thefolder)
+       # print str(thefolder)
         f = open(thefolder  )
         lines = f.readlines()
         f.close()
@@ -74,7 +74,7 @@ class InventoryManager:
                 print "Clash found for item " + currentitemname
                 thereturn = splititems[1]
         return thereturn #Return either "None" or the filter if the item matched a filter
-    
+
     def test(self):
         print "Inventory manager - TEst"
         self.filterlist = self.getrawfilterlist()
@@ -104,7 +104,7 @@ class InventoryManager:
             startpos = html.find("id_arr[",startopos3) #Few words before id
             startpos2 = html.find('value="',startpos) +7
 
-            
+
 
             startpos4= html.find('left">',endpos) +6 #Few words before name
             startpos5= html.find('</TD>',startpos4) #Few words after name
@@ -119,9 +119,9 @@ class InventoryManager:
                         thefilter = self.GetItemFilterByname(theitemname)
                         print thefilter
                         if not thefilter == None:
-                            
+
                             #print "Clash Found2" + str(theitemname)
-                            
+
 
 
                             #Where should we send this item?
@@ -137,8 +137,8 @@ class InventoryManager:
                             postdata["radio_arr[" + str(arrynum) + "]"] = "deposit"
                             self.itemcollection = self.itemcollection + ["&id_arr[" + str(arrynum) + "]=" + html[startpos2:endpos] + "&radio_arr[" + str(arrynum) + "]=deposit"]
                             arrynum = arrynum + 1
-   
-            
+
+
         #print postdata
         html = self.acc.post(outputurl, postdata ,"http://www.neopets.com/quickstock.phtml")
         #print html
@@ -157,7 +157,7 @@ class InventoryManager:
             html2 = self.acc.post("http://www.neopets.com/process_market.phtml", postdata ,"http://www.neopets.com/market.phtml?type=edit")
             #print html2
             if (html2.find("Neopoints to open your own shop") > 1): #Not enough np
-    
+
                 time.sleep(5)
                # print "NOOOOO"
                 return 0 #Return 0 so we dont get stuck in a loop
@@ -166,16 +166,16 @@ class InventoryManager:
                  time.sleep(5)
                  self.Depositall() #Recall this function now a shop is made
             #print html
-            
 
 
 
 
-        
-    
 
 
 
-            
 
- 
+
+
+
+
+
