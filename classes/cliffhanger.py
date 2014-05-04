@@ -150,6 +150,7 @@ class cliffhanger:
             randitem = knownlist[0]# a random item in the known list
             postdata = {'solve_puzzle' : randitem}
             html=self.acc.post('http://www.neopets.com/games/cliffhanger/process_cliffhanger.phtml',postdata)
+            print html
         else:
 
             postdata = {'solve_puzzle' : matchpatterval[0]}

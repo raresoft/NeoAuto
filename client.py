@@ -52,10 +52,22 @@ CJ=CookieJar() #Cookies
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(CJ))
 
 Dodebugmode = 1
-neouser = "" #neopets username here
-neopass = "" #neopets password here
+neouser = "" #not needed directly if using a none debug mode
+neopass = "" #not needed directly if using a none debug mode
 proxy = "" #localhost:8888 or 123.123.123.123:8080 ect - "" for none
 
+if neouser == "":
+    #Todo add a user input option here if neouser not set
+    print 'Username not set , exiting in 10 seconds...'
+    time.sleep(10)
+    sys.exit()
+
+
+if neopass == "":
+    #Todo add a user input option here if neopass not set
+    print 'Username not set , exiting in 10 seconds...'
+    time.sleep(10)
+    sys.exit()
 
 
 pyamfhandler = RemotingService('http://habitarium.neopets.com/amfphp/gateway.php')
@@ -124,8 +136,6 @@ while test ==1:
 
     #nq2handler.Dotick()
 
-
-   # continue
 
 
     if avatarhandler.avataron == 'on':

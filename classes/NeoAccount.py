@@ -20,6 +20,7 @@ class NeoAccount:
         self.pw = pw
         self.proxy = proxy
         self.referer = ''
+        self.cleanhtml = ''
 
         self.cj = cookielib.LWPCookieJar()
         self.cookie_handler = urllib2.HTTPCookieProcessor(self.cj)
@@ -44,12 +45,16 @@ class NeoAccount:
             url = self.d + url
         if referer == '':
             referer = self.referer
-        self.opener.addheaders = [('Referer', referer)]  + self.headers
+        self.opener.addheaders = [('Referer', referer)] + self.headers
         res = self.opener.open(url)
         self.referer = res.geturl()
         if readable:
-            return self.readable(res)
+            theret = self.readable(res)
+            self.cleanhtml = theret.replace('"',"'")
+            return theret
         else:
+            theret = str(res)
+            self.cleanhtml = theret.replace('"',"'")
             return res
 
     def post(self, url, data, referer = '', readable = True):
@@ -62,8 +67,12 @@ class NeoAccount:
         res = self.opener.open(url, urllib.urlencode(data))
         self.referer = res.geturl()
         if readable:
-            return self.readable(res)
+            theret = self.readable(res)
+            self.cleanhtml = theret.replace('"',"'")
+            return theret
         else:
+            theret = str(res)
+            self.cleanhtml = theret.replace('"',"'")
             return res
 
 

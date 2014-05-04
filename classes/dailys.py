@@ -372,6 +372,20 @@ class dailys:
         html = self.acc.post("http://www.neopets.com/desert/fruit/index.phtml" , postdata ,"http://www.neopets.com/desert/fruit/index.phtml")
         filename = "FruitMachine" + self.acc.user + '_' +  str(time.time())
 
+
+
+        if html.find('this is not a winning spin'):
+            self.loghandler.writestringtofile(self.acc.user,'this is not a winning spin',0)
+            return 1
+
+        if html.find('already had your free spin for today'):
+
+            return 1
+
+
+
+
+
         self.writestringtofile(filename,html)
 
 
@@ -385,9 +399,25 @@ class dailys:
         html = self.acc.get("http://www.neopets.com/winter/snowager.phtml","http://www.thedailyneopets.com/dailies/")
         if (html.find ("The Snowager is awake") == -1):
             html = self.acc.get("http://www.neopets.com/winter/snowager2.phtml","http://www.neopets.com/winter/snowager.phtml")
-            filename = "Snowager_" + self.acc.user + '_' +  str(time.time())
 
-            self.writestringtofile(filename,html)
+            #Only when asleep...
+            if html.find('The Snowager moves slightly in its sleep'):
+                self.loghandler.writestringtofile(self.acc.user,'The Snowager moves slightly in its sleep , no prize',0)
+                return 1
+
+            if html.find(' and pick up a plush toy'):
+                pos1 = html.find('from the pile ')
+                pos2 = html.find('<b>',pos1)
+                pos3 = html.find('</b>',pos2)
+                prizename = html[pos2:pos3]
+                self.loghandler.writestringtofile(self.acc.user,'Snowager , Grabbed a plushie - ' + prizename,1)
+                return 1
+
+
+
+        filename = "Snowager_" + self.acc.user + '_' +  str(time.time())
+
+        self.writestringtofile(filename,html)
     def process_tomb(self):
 
     #Deserted Tomb
@@ -395,6 +425,9 @@ class dailys:
         print "Checking Deserted Tomb"
         html = self.acc.get("http://www.neopets.com/worlds/geraptiku/process_tomb.phtml","http://www.neopets.com/worlds/geraptiku/tomb.phtml")
         filename = "Dtomb_" + self.acc.user + '_' +  str(time.time())
+
+        if html.find('must be at least') > 1:
+            return 1
         self.writestringtofile(filename,html)
 
 

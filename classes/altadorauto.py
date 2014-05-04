@@ -52,7 +52,7 @@ class altador:
         thelink2pos = html.find('"',thelink1pos)
         urldata = html[thelink1pos:thelink2pos]
 
-        #print html
+
         finalurl = 'http://www.neopets.com/altador/petpet.phtml' + urldata
         return finalurl
 
@@ -139,8 +139,8 @@ class altador:
 
 
     def checkforoil(self,html):
-        #Check statues html for oul found and grab it if its there
-
+        #Check statues html for oil found and grab it if its there
+                foundoil = 0
                 if html.find('statue_base_oil') > 1:
                     print 'oil found'
                     pos1=html.find('soh=')
@@ -149,7 +149,213 @@ class altador:
                     graburl = 'http://www.neopets.com/altador/hallofheroes.phtml?'+ graburl1
                     print 'Grabbing oil from url : ' + graburl
                     html =self.acc.get(graburl , 'http://www.neopets.com/altador/hallofheroes.phtml?janitor=1')
+                    foundoil=1
 
+
+                return foundoil
+
+
+
+    def detectpostion(self):
+        #Detect the position of a game in progress (simple code)
+        html = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml')
+        theret = '0'
+        if html.find('stairs=1') > 1:
+            #Stairs found on hall of heroes page , so stage is at least 2
+            theret = '1.13'
+        else:
+            #Stairs not found , set stage to 0
+            theret = '0'
+            return '0'
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=6')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=6&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_06') > 1:
+            #Light found above statue 1
+            theret = '4.28'
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=9')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=9&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_09') > 1:
+            #Light found above statue 1
+            theret = '5.34'
+
+
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=2')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=2&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_02') > 1:
+            #Light found above statue
+            theret = '6.43'
+
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=4')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=4&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_04') > 1:
+            #Light found above statue
+            theret = '7.52'
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=11')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=11&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_11') > 1:
+            #Light found above statue
+            theret = '8.61'
+
+
+
+
+
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=7')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=7&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_07') > 1:
+            #Light found above statue
+            theret = '8.65'
+
+
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=5')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=5&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_05') > 1:
+            #Light found above statue
+            theret = '10.78'
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=10')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=10&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_10') > 1:
+            #Light found above statue
+            theret = '10.85'
+
+
+
+
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=3')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=3&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_03') > 1:
+            #Light found above statue
+            theret = '11.95'
+
+
+
+
+
+
+
+        html2 = self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=8')
+
+
+        pos1=html2.find('look_up=')
+        pos2 = self.acc.cleanhtml.find("'",pos1)
+        print self.acc.cleanhtml
+        graburl1 = html2[pos1:pos2]
+        graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=8&' + graburl1
+
+        html3 = self.acc.get(graburl)
+        if html3.find('ceil_light_08') > 1:
+            #Light found above statue
+            theret = '13.111'
+
+
+
+
+        self.settingsmanager.setvalue('misc','altador_stage',theret)
+        self.atadorstage = theret
+        return theret
 
     def DoTick(self):
         #Run a check of all dailys and process 1 if needed
@@ -167,35 +373,37 @@ class altador:
         if self.altadoron == 'on':
             print self.atadorstage
             if self.atadorstage == '0':
+                print "Altador plot running past game detection logic..."
+
+                theret = self.detectpostion()
+                if not theret == '0': #Position changed
+                    return
+
+
                 print 'Altador bot advancing to stage 1.3'
 
-               # print html
+
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?janitor=1','www.neopets.com/altador/hallofheroes.phtml')
                 self.settingsmanager.setvalue('misc','altador_stage', '1.3')
                 self.atadorstage = '1.3'
             if self.atadorstage == '1.3':
                 print 'Altador bot advancing to stage 1.4'
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?janitor=1&push_button=1&acpcont=1','http://www.neopets.com/altador/hallofheroes.phtml?janitor=1&push_button=1')
-
-
                 self.settingsmanager.setvalue('misc','altador_stage', '1.4')
                 self.atadorstage = '1.4'
 
             if self.atadorstage == '1.4':
                 print 'Altador bot advancing to stage 1.6'
                 html =self.acc.get('http://www.neopets.com/altador/archives.phtml?archivist=1&get_book=1&acpcont=1','http://www.neopets.com/altador/archives.phtml?archivist=1&get_book=1')
-
                 self.settingsmanager.setvalue('misc','altador_stage', '1.6')
                 self.atadorstage = '1.6'
 
             if self.atadorstage == '1.6':
                 print 'Altador bot advancing to stage 1.7'
                 html =self.acc.get('http://www.neopets.com/altador/quarry.phtml?get_rock=1&acpcont=1','http://www.neopets.com/altador/quarry.phtml?get_rock=1')
-
                 self.settingsmanager.setvalue('misc','altador_stage', '1.7')
                 self.atadorstage = '1.7'
 
-                return
 
 
         if self.atadorstage == '1.7':
@@ -228,41 +436,112 @@ class altador:
 
         if self.atadorstage == '1.11':
                 print 'Altador bot advancing to stage 1.12 - this may takeafew mins'
+
+
+
+                print 'Altador bot advancing to stage 1.12 - this may takeafew mins'
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=1','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
+
+
+
+
+
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=2','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=3','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=4','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=5','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=6','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=7','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=8','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=9','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=10','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=11','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
+                theret = self.checkforoil(html)
+
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=12','http://www.neopets.com/altador/hallofheroes.phtml')
-                self.checkforoil(html)
-             #   html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=13','http://www.neopets.com/altador/hallofheroes.phtml')
-               # html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=14','http://www.neopets.com/altador/hallofheroes.phtml')
+                theret = self.checkforoil(html)
 
-                self.settingsmanager.setvalue('misc','altador_stage', '1.12')
-                self.atadorstage = '1.12'
+                if theret == 1:
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.12')
+                    self.atadorstage = '1.12'
+                    return
 
+                #If we got here code failed , set stage to 0 and retry
+                self.settingsmanager.setvalue('misc','altador_stage', '0')
+                self.atadorstage = '0'
         if self.atadorstage == '1.12':
                 print 'Altador bot advancing to stage 1.13'
                 html =self.acc.get('http://www.neopets.com/altador/hallofheroes.phtml?janitor=1&push_button=1&acpcont=1','http://www.neopets.com/altador/hallofheroes.phtml?janitor=1')
-                self.settingsmanager.setvalue('misc','altador_stage', '1.13')
-                self.atadorstage = '1.13'
+                theret = self.detectpostion()
+                if not theret == '1.13': #We shwatch spiderman
+               # should have 1.13 here , if not passed code failed so go back to stage 0
+                    self.settingsmanager.setvalue('misc','altador_stage', '0')
+                    self.atadorstage = '0'
+                    return
 
 
         if self.atadorstage == '1.13':
@@ -276,6 +555,8 @@ class altador:
                 print 'Altador bot advancing to stage 2.17'
                 postdata = {'board' :'6', 'join_club' : '1'}
                 html =self.acc.post('http://www.neopets.com/altador/archives.phtml',postdata,'http://www.neopets.com/altador/archives.phtml?board=6')
+
+
 
                 self.settingsmanager.setvalue('misc','altador_stage', '2.17')
                 self.atadorstage = '2.17'
@@ -294,12 +575,13 @@ class altador:
                 print 'Altador bot advancing to stage 3.21'
 
                 html =self.acc.get('http://www.neopets.com/altador/tomb.phtml','http://thedailyneopets.com/altador-plot/part3/')
+                cleanhtml = self.acc.cleanhtml
                 pos1=html.find('/altador/tomb.phtml?thv=')
-                pos2 = html.find('"',pos1)
-                graburl1 = html[pos1:pos2]
+                pos2 = cleanhtml.find("'",pos1)
+                graburl1 = cleanhtml[pos1:pos2]
                 graburl = 'http://www.neopets.com' + graburl1
 
-                print  graburl
+
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/tomb.phtml')
 
@@ -332,22 +614,30 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
-                self.settingsmanager.setvalue('misc','altador_stage', '4.28')
-                self.atadorstage = '4.28'
+
+                theret = self.detectpostion()
+                if not theret == '4.28': #We should have 4.28 here , if not passed code failed so go back to stage 1.13
+                    self.settingsmanager.setvalue('misc','altador_stage', '1.13')
+                    self.atadorstage = '1.13'
+                    return
+
+
+
+
 
         if self.atadorstage == '4.28':
                 print 'Altador bot advancing to stage 4.29'
 
                 html =self.acc.get('http://www.neopets.com/altador/clouds.phtml','http://thedailyneopets.com/altador-plot/part4/')
+                cleanhtml = self.acc.cleanhtml
                 pos1=html.find('chv=')
-                pos2 = html.find('"',pos1)
+                pos2 = cleanhtml.find("'",pos1)
                 graburl1 = html[pos1:pos2]
                 graburl = 'http://www.neopets.com/altador/clouds.phtml?' + graburl1
 
-                print  graburl
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/tomb.phtml')
-                #print html
+
 
 
 
@@ -369,14 +659,15 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
-                self.settingsmanager.setvalue('misc','altador_stage', '5.34')
-                self.atadorstage = '5.34'
+
+                theret = self.detectpostion()
+                if not theret == '5.34': #We should have 5.34 here , if not passed code failed so go back to stage 4.28
+                    self.settingsmanager.setvalue('misc','altador_stage', '4.28')
+                    self.atadorstage = '4.28'
+                    return
 
 
 
-
-                self.settingsmanager.setvalue('misc','altador_stage', '5.34')
-                self.atadorstage = '5.34'
 
         if self.atadorstage == '5.34':
                 print 'Altador bot advancing to stage 5.35'
@@ -387,7 +678,7 @@ class altador:
                 graburl1 = html[pos1:pos2]
                 graburl = 'http://neopets.com/altador/tomb.phtml?' + graburl1
 
-                print  graburl
+
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/tomb.phtml')
 
@@ -446,8 +737,14 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
-                self.settingsmanager.setvalue('misc','altador_stage', '6.43')
-                self.atadorstage = '6.43'
+
+                theret = self.detectpostion()
+                if not theret == '6.43': #We should have 5.34  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '5.34')
+                    self.atadorstage = '5.34 '
+                    return
+
+
 
         if self.atadorstage == '6.43':
                 print 'Altador bot advancing to stage 6.47'
@@ -476,7 +773,7 @@ class altador:
 
                 html3 =self.acc.get(graburl,'http://www.neopets.com/altador/tomb.phtml')
 
-               # print html3
+
                 pos1=html3.find('&umhv=')
 
                 pos3 = html3.find('?windmill=',pos1)
@@ -524,9 +821,12 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
+                theret = self.detectpostion()
+                if not theret == '7.52': #We should have 6.43  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '6.43')
+                    self.atadorstage = '6.43 '
+                    return
 
-                self.settingsmanager.setvalue('misc','altador_stage', '7.52')
-                self.atadorstage = '7.52'
 
         if self.atadorstage == '7.52':
                 print 'Altador bot advancing to stage 7.55'
@@ -540,7 +840,7 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
-              #  print html
+
 
 
 
@@ -569,10 +869,13 @@ class altador:
                 graburl ='http://www.neopets.com/altador/astro.phtml?' + graburl1
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
+                theret = self.detectpostion()
+                if not theret == '8.61': #We should have 6.43  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '7.52')
+                    self.atadorstage = '7.52 '
+                    return
 
 
-                self.settingsmanager.setvalue('misc','altador_stage', '8.61')
-                self.atadorstage = '8.61'
 
         if self.atadorstage == '8.61':
 
@@ -616,10 +919,17 @@ class altador:
                 graburl ='http://www.neopets.com/altador/astro.phtml?' + graburl1
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
-                print graburl
 
-                self.settingsmanager.setvalue('misc','altador_stage', '8.65')
-                self.atadorstage = '8.65'
+                theret = self.detectpostion()
+
+                if not theret == '8.65': #We should have 6.43  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '8.61')
+                    self.atadorstage = '8.61'
+                    return
+
+
+
+
 
         if self.atadorstage == '8.65':
                 print 'Altador bot advancing to stage 9.71'
@@ -663,7 +973,7 @@ class altador:
                 theurl ='http://www.neopets.com/altador/colosseum.phtml?pchv='+theoi +'&pc_go=1'
 
                 html5 =self.acc.get(theurl,'http://www.neopets.com/altador/colosseum.phtml')
-                #print html3
+
 
 
                 url1pos1=html5.find('punch1=')+7
@@ -691,11 +1001,6 @@ class altador:
                 theoi3 = html5[url3pos1:url3pos2]
 
                 #Extract all 3 punch oiis , add them as punch1,punch2,punch3 later
-                print '1 - ' + theoi
-                print '2 - ' + theoi2
-                print '3 - ' + theoi3
-
-
 
 
                 finalpos1=html5.find('pchv') +5
@@ -758,15 +1063,14 @@ class altador:
                     if html5.find('gchv') > 1:
                         break
 
-                #print html5
-                #return
+
+
                 cuppos1=html5.find('gchv')
                 cuppos2=html5.find('"',cuppos1)
                 cuphash= '&' + html5[cuppos1:cuppos2]
                 #cup is available
                 atfuckinglasturl = 'http://www.neopets.com/altador/colosseum.phtml?pchv=' + pchv + cuphash + '&pc_go=1'
                 html7 =self.acc.get(atfuckinglasturl,'http://www.neopets.com/altador/colosseum.phtml')
-               # print html7
 
 
                 cuppos1=html7.find('gchv')
@@ -776,8 +1080,7 @@ class altador:
 
                 omgthatwasnoteventhelastoneurl =  'http://www.neopets.com/altador/colosseum.phtml?pchv=' + pchv + cuphash + '&pc_go=1'
                 html8 =self.acc.get(omgthatwasnoteventhelastoneurl,'http://www.neopets.com/altador/colosseum.phtml')
-                #print html8
-                #return
+
                 self.settingsmanager.setvalue('misc','altador_stage', '9.74')
                 self.atadorstage = '9.74'
 
@@ -795,9 +1098,14 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
- #               return
-                self.settingsmanager.setvalue('misc','altador_stage', '10.78')
-                self.atadorstage = '10.78'
+
+                theret = self.detectpostion()
+
+                if not theret == '10.78': #We should have 6.43  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '8.61')
+                    self.atadorstage = '8.65'
+                    return
+
 
 
         if self.atadorstage == '10.78':
@@ -805,7 +1113,7 @@ class altador:
                 urllist = "http://www.neopets.com/objects.phtml?type=shop&obj_type=94|http://www.neopets.com/objects.phtml?type=shop&obj_type=95|http://www.neopets.com/objects.phtml?type=shop&obj_type=96"
                 urlary = urllist.split('|')
                 for urltarget in urlary:
-                    print urltarget
+
                     html = self.acc.get(urltarget,'http://thedailyneopets.com/altador-plot/part10')
                     #set inflation value
                     posinflation1 = html.find('ly at <b>') +9
@@ -817,25 +1125,25 @@ class altador:
 
 
                     html = self.acc.get(urltarget,'http://thedailyneopets.com/altador-plot/part10')
-                    print html
+
                     if html.find('Altadorian Scales') > 1:
                         print 'scales found'
 
                         posscales1 = html.find('gohv')
                         posscales2 = html.find('"',posscales1)
                         scalesraw = html[posscales1:posscales2] #inflation with .
-                        print 'raw' + scalesraw
+
                         html = self.acc.get('http://www.neopets.com/altador/index.phtml?' + scalesraw,'http://thedailyneopets.com/altador-plot/part10')
-                        print html
+
                     if html.find('Altadorian Chocolate Coin') > 1:
                         print 'Chocolate Coin found'
 
                         posscales1 = html.find('gohv')
                         posscales2 = html.find('"',posscales1)
                         scalesraw = html[posscales1:posscales2] #inflation with .
-                        print 'raw' + scalesraw
+
                         html = self.acc.get('http://www.neopets.com/altador/index.phtml?' + scalesraw,'http://thedailyneopets.com/altador-plot/part10')
-                        print html
+
 
 
                     if html.find('Coin Purse') > 1:
@@ -844,11 +1152,10 @@ class altador:
                         posscales1 = html.find('gohv')
                         posscales2 = html.find('"',posscales1)
                         scalesraw = html[posscales1:posscales2] #inflation with .
-                        print 'raw' + scalesraw
+
 
 
                         html = self.acc.get('http://www.neopets.com/altador/index.phtml?' + scalesraw,'http://thedailyneopets.com/altador-plot/part10')
-                        print html
 
 
                 self.settingsmanager.setvalue('misc','altador_stage', '10.80')
@@ -879,8 +1186,15 @@ class altador:
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
 
-                self.settingsmanager.setvalue('misc','altador_stage', '10.85')
-                self.atadorstage = '10.85'
+                theret = self.detectpostion()
+
+                if not theret == '10.85': #We should have 6.43  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '10.78')
+                    self.atadorstage = '10.78'
+                    return
+
+
+
 
 
 
@@ -901,9 +1215,9 @@ class altador:
 
                 graburl1 = html[pos1:pos2]
                 graburl ='http://www.neopets.com/altador/archives.phtml?archivist=1&' + graburl1
-                print graburl
+
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
-                #print html
+
 
 
                 pos1=html.find('steal=')
@@ -946,8 +1260,7 @@ class altador:
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
-               # print html
-               # return
+
 
 
 
@@ -985,7 +1298,7 @@ class altador:
 
 
 
-              #  print door3html
+
                 posstart1 =door3html.find('goarch=') + 5 #Skip the first link , we want link 4
                 posstart2=door3html.find('goarch=',posstart1) + 5 #Skip the second link , we want link 4
                 posstart3=door3html.find('goarch=',posstart2) + 5 #Skip the second link , we want link 4
@@ -995,7 +1308,7 @@ class altador:
                 graburl ='http://www.neopets.com/altador/archives.phtml?' + graburl1
 
                 finaldoorhtml =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
-                #print finaldoorhtml
+
 
 
                 pos1=finaldoorhtml.find('getting his replacements')
@@ -1003,7 +1316,7 @@ class altador:
                 pos2 = finaldoorhtml.find('value=',pos1)+7
                 pos3 = finaldoorhtml.find('"',pos2)
                 theoi = finaldoorhtml[pos2:pos3]
-                print theoi
+
 
 
                 postdata = {'hide_box' : '1' , 'closet' : theoi}
@@ -1028,9 +1341,8 @@ class altador:
 
                 graburl1 = html[pos1:pos2]
                 graburl ='http://www.neopets.com/altador/archives.phtml?archivist=1&' + graburl1
-                print graburl
+
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
-                #print html
 
 
                 pos1=html.find('steal=')
@@ -1039,7 +1351,7 @@ class altador:
                 graburl ='http://www.neopets.com/altador/archives.phtml?archivist=1&' + graburl1
 
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
-               #print html
+
 
                 self.settingsmanager.setvalue('misc','altador_stage', '11.93')
                 self.atadorstage = '11.93'
@@ -1056,7 +1368,6 @@ class altador:
 
                 graburl ='http://www.neopets.com/altador/archives.phtml?lclenny=1&' + graburl1
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
-                #print html
 
                 self.settingsmanager.setvalue('misc','altador_stage', '10.94')
                 self.atadorstage = '11.94'
@@ -1074,14 +1385,29 @@ class altador:
                 graburl1 = html[pos1:pos2]
                 graburl ='http://www.neopets.com/altador/astro.phtml?' + graburl1
 
+
+
+
+
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
 
 
                 html = self.acc.get('http://www.neopets.com/altador/archives.phtml?board=6')
 
-                self.settingsmanager.setvalue('misc','altador_stage', '11.95')
-                self.atadorstage = '11.95'
+
+
+
+                theret = self.detectpostion()
+
+                if not theret == '11.95': #We should have 6.43  here , if not passed code failed so go back to stage 6.43
+                    self.settingsmanager.setvalue('misc','altador_stage', '10.85')
+                    self.atadorstage = '10.85'
+                    return
+
+
+
+
 
 
 
@@ -1394,8 +1720,17 @@ class altador:
                 html =self.acc.get(graburl,'http://www.neopets.com/altador/astro.phtml?')
 
 
-                self.settingsmanager.setvalue('misc','altador_stage', '13.111')
-                self.atadorstage = '13.111'
+
+
+                theret = self.detectpostion()
+
+                if not theret == '13.111':
+                    self.settingsmanager.setvalue('misc','altador_stage', '11.95')
+                    self.atadorstage = '11.95'
+                    return
+
+
+
 
 
         if self.atadorstage == '13.111':
@@ -1424,7 +1759,6 @@ class altador:
                 html = self.acc.get (graburl)
 
 
-               # print html
 
                 self.settingsmanager.setvalue('misc','altador_stage', '13.114')
                 self.atadorstage = '13.114'
@@ -1903,7 +2237,7 @@ class altador:
                     if html.find('This spellbook contains')>1:
                         targeturl2 = targeturl + '&spell_id=29884'
                         html = self.acc.get('http://www.neopets.com/altador/archives.phtml?' + targeturl2)
-                        #print html
+
 
 
                 self.settingsmanager.setvalue('misc','altador_stage', '15.140')

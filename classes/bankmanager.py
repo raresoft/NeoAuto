@@ -9,6 +9,18 @@ class bankmanager:
         self.withdrawamount = settingsmanager.getvalue("bank","withdrawamount")
 
 
+        testhtml = self.acc.get('http://www.neopets.com/bank.phtml')
+        if testhtml.find("I see you don't currently") >1 :
+            print 'Bank account not found , so opening one...'
+            postdata = {"type" : "new_account",
+            "name" : self.acc.user,
+            "add1" : 'home',
+            "employment" : 'Chia Custodian',
+            "salary" : '10,000 NP and below',
+            "account_type" : '0',
+            "initial_deposit" : '1',
+            }
+            self.acc.post('http://www.neopets.com/process_bank.phtml',postdata,'http://www.neopets.com/bank.phtml')
 
 
     def deopsitall(self):

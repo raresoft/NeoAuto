@@ -42,14 +42,17 @@ class nomobileservices:
         #Get Np on hand
         retnp = 0
         temphtml = self.acc.get('http://www.neopets.com/objects.phtml')
-        if temphtml.find('NP: <') > 1:
-            startpos = temphtml.find('NP: <')
-            startpos2 = temphtml.find('">',startpos) +2
+
+
+        if temphtml.find("id='npanchor") > 1:
+            startpos = temphtml.find("id='npanchor")
+            startpos2 = self.acc.cleanhtml.find("'>",startpos) +2
             endpos = temphtml.find('</a>',startpos2)
             tempnp = temphtml[startpos2:endpos]
 
             tempnp = tempnp.replace(',','')
-        return tempnp
+            retnp =tempnp
+        return retnp
 
 
     def getpetlist(self):
