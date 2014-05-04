@@ -97,7 +97,7 @@ def dologin(debugmode=1): #Debug mode is optional and set to 1 by default
 
 
 acc = dologin(Dodebugmode) #Do login trys to login and returns a new instance of NeoAccount
-habihander = habi(acc,pyamfhandler) #Setup habi hander module
+habihander = habi(acc,pyamfhandler,proxy) #Setup habi hander module
 #Todo , Detect fails here
 #Add mobile login
 settingsmanager = settings(acc.user) #Load settings for this account , store data/class in sessionmanager
@@ -168,6 +168,7 @@ while test ==1:
 
             #We did nothing at all , fallback to habi
           # print "Should do habi here"
-           habihander.DoLoop()
+           habihander.DoLoop(
+           time.sleep(30)
 
 
