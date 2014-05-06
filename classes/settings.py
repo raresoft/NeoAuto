@@ -27,6 +27,10 @@ class settings:
             print "creating new cache file based on ./cache/default.cfg"
 
 
+
+            default_autoprice_file = self.getDefaultvalue('shop','autoprice_file')
+            default_autoprice = self.getDefaultvalue('shop','autoprice')
+            default_withdrawtill = self.getDefaultvalue('shop','withdrawtill')
             default_lastsnowagertime = self.getDefaultvalue('timecache','lastsnowagertime')
             default_snowager_on = self.getDefaultvalue('Dailys','snowager_on')
             default_Wheel_medio_on = self.getDefaultvalue('Dailys','Wheel_medio_on')
@@ -46,10 +50,9 @@ class settings:
             default_withdrawamount = self.getDefaultvalue('bank','withdrawamount')
             default_traineron = self.getDefaultvalue('trainer','trainpets')
 
+            default_lastshoptime = self.getDefaultvalue('timecache','lasttilltime')
 
-
-
-            default_lastQasatime = self.getDefaultvalue('timecache','lastQasatime')
+            default_lastpricetime = self.getDefaultvalue('timecache','lastpricetime')
 
 
             default_lastavatartime = self.getDefaultvalue('timecache','avatartime')
@@ -110,19 +113,19 @@ class settings:
 
             # add the settings to the structure of the file, and lets write it out...
             confighandler.add_section('Dailys')
-            confighandler.add_section('timecache')
+
             confighandler.add_section('Settings')
             confighandler.add_section('misc')
             confighandler.add_section('bank')
             confighandler.add_section('trainer')
 
             confighandler.add_section('games')
-
+            confighandler.add_section('shop')
 
 
             confighandler.add_section('nq2')
             confighandler.add_section('Scratchcard')
-
+            confighandler.add_section('timecache')
             #elf.altador_on = self.getvalue("misc","altador_on")
 
 
@@ -134,16 +137,19 @@ class settings:
             confighandler.set('timecache','lastcocotime', default_lastcocotime)
 
             confighandler.set('timecache','cliffhangertime', default_lastcliffhangertime)
+            confighandler.set('shop','withdrawtill', default_withdrawtill)
+            confighandler.set('shop','autoprice', default_autoprice)
+            confighandler.set('shop','autoprice_file', default_autoprice_file)
 
             confighandler.set('timecache','lastsnowagertime', default_lastsnowagertime)
             confighandler.set('timecache','lasttombtime', default_lasttombtime)
             confighandler.set('timecache','lastshrinetime', default_lastshrinetime )
             confighandler.set('timecache','lasttombolatime', default_lasttombolatime)
             confighandler.set('timecache','lastbagatelletime', default_lastbagatelletime)
+            confighandler.set('timecache','lasttilltime', default_lastshoptime)
+
+            confighandler.set('timecache','lastpricetime', default_lastpricetime)
             confighandler.set('timecache','lastQasatime', default_lastQasatime)
-
-
-
             confighandler.set('timecache','avatartime', default_lastavatartime)
             confighandler.set('bank','minnponhand', default_minnponhand)
             confighandler.set('bank','withdrawamount', default_withdrawamount)
@@ -158,6 +164,7 @@ class settings:
 
 
             confighandler.set('timecache','lastknoltime', default_lastknoltime)
+
 
 
             confighandler.set('nq2','nq2stage', "1")

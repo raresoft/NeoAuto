@@ -415,9 +415,9 @@ class dailys:
 
 
 
-        filename = "Snowager_" + self.acc.user + '_' +  str(time.time())
+            filename = "Snowager_" + self.acc.user + '_' +  str(time.time())
 
-        self.writestringtofile(filename,html)
+            self.writestringtofile(filename,html)
     def process_tomb(self):
 
     #Deserted Tomb

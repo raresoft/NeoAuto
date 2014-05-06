@@ -48,21 +48,21 @@ class InventoryManager:
 
 
     def fetchfilterlist(self,thefolder):
-       # print str(thefolder)
+
         f = open(thefolder  )
         lines = f.readlines()
         f.close()
         lines2=[]
         for x in lines:
             lines2.append(x.replace("\n",""))
-            #print "line" + x.replace("\n","")
+
             #self.getitemfilter_byname("lucodestrong")
         return lines2
 
 
     def GetItemFilterByname(self,itemname):
         #Gets the filter type for a certain item.
-        print "Inventory manager - TEst"
+
         self.filterlist = self.getrawfilterlist()
         #Loop each item in the filter list to find its name...
         thereturn = None #Return none if no filter
