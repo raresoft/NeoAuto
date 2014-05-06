@@ -1,4 +1,0 @@
--Battleitems.txt
-
-  Contains items a pet will be equiped with to use in battle , the higher on the list the more priority. The bot will search
-  the players invenotry and sdb for these items and equip the best available items.
