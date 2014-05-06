@@ -11,7 +11,7 @@ import random #used to randomise numbers and get a random number between a range
 
 
 #Begin Class
-class shopManager:
+class shopmanager:
 
 
     def __init__(self,acc,settingsmanager):
