@@ -35,7 +35,7 @@ from classes.habi import habi
 from classes.mobileservices import mobileservices
 from classes.nomobileservices import nomobileservices
 
-
+from classes.shopmanager import shopmanager
 
 
 from classes.altadorauto import altador
@@ -100,12 +100,14 @@ acc = dologin(Dodebugmode) #Do login trys to login and returns a new instance of
 habihander = habi(acc,pyamfhandler,proxy) #Setup habi hander module
 #Todo , Detect fails here
 #Add mobile login
+
+
 settingsmanager = settings(acc.user) #Load settings for this account , store data/class in sessionmanager
 depositfile =  settingsmanager.getvalue("Settings","depositlist") #Deposit list items
 doaltador =settingsmanager.getvalue("misc","altador_on") #Altador on off switch
 inventorymanager = InventoryManager(acc,depositfile,settingsmanager)
 #we logged into a account so lets load settings...
-
+shopmanager = shopmanager (acc,settingsmanager)
 lastlogintime = time.time()
 
 
@@ -131,15 +133,18 @@ avatarhandler = avatar(acc,settingsmanager,mobilehandler)
 test = 1
 while test ==1:
 
+    if shopmanager.withdrawtill == 'on':
+        if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
+            shopmanager.checktill()
 
-
-
-    #nq2handler.Dotick()
+    if shopmanager.autoprice_on == 'on':
+        if (time.time() - float(shopmanager.lastpricetime) > 1800): #price items every hour
+            shopmanager.priceitems()
 
 
 
     if avatarhandler.avataron == 'on':
-        if (time.time() - float(avatarhandler.lastavatartime) > 500): #grab a avatar every 5 mins
+        if (time.time() - float(avatarhandler.lastavatartime) > 300): #grab a avatar every 5 mins
             avatarhandler.getavatar()
 
 
