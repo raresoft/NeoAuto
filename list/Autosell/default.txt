@@ -1,2 +1,7 @@
-Vo Codestone:9999
-Race to Riches Scratchcard:6666
+Format is Item name:itemprice - Do not delete this line
+Race to Riches Scratchcard:580
+Terror Trove Scratchcard:1300
+Faeries Fortune Scratchcard:1300
+Scorched Treasure Scratchcard:480
+Coltzans Cash Scratchcard:650
+Suteks Riches Scratchcard:1450

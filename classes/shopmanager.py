@@ -149,7 +149,7 @@ class shopmanager:
 
 
                 itemname= html[startpos1:endpos1]
-
+                itemcount = itemcount+1
                 thestartpos = endpos1
 
              #   continue

@@ -52,8 +52,8 @@ CJ=CookieJar() #Cookies
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(CJ))
 
 Dodebugmode = 1
-neouser = "" #not needed directly if using a none debug mode
-neopass = "" #not needed directly if using a none debug mode
+neouser = ""
+neopass = ""
 proxy = "" #localhost:8888 or 123.123.123.123:8080 ect - "" for none
 
 if neouser == "":
@@ -133,12 +133,18 @@ avatarhandler = avatar(acc,settingsmanager,mobilehandler)
 test = 1
 while test ==1:
 
+
+    #Auto Battle class..... Coming next version probly , code is left in as i noticed a bug in last version before finishing
+
+
+
+
     if shopmanager.withdrawtill == 'on':
         if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
             shopmanager.checktill()
 
     if shopmanager.autoprice_on == 'on':
-        if (time.time() - float(shopmanager.lastpricetime) > 1800): #price items every hour
+        if (time.time() - float(shopmanager.lastpricetime) > 900): #price items every half hour
             shopmanager.priceitems()
 
 
@@ -149,10 +155,6 @@ while test ==1:
 
 
 
-    #if traininghandler.trainingon == 'on':
-    #    print 'Trainer tick..'
-    #    traininghandler.dotick()
-   #     time.sleep(15)
 
     if doaltador == 'on':
         if althandler.DoTick() == 999:#Done if 999
