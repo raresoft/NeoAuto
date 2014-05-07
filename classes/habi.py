@@ -29,7 +29,14 @@ from pyamf.remoting.client import RemotingService #Pyamf class used for amf requ
 
 #Begin Class
 class habi:
-    def __init__(self,acc,thegateway,theproxy,build_housecount = 1 , build_nestcount= 10 ,build_storagecount = 4 ):
+    def __init__(self,acc,thegateway,theproxy,settingsmanager,build_housecount = 1 , build_nestcount= 10 ,build_storagecount = 4 ):
+
+        self.settingsmanager = settingsmanager
+        self.habi_on = self.settingsmanager.getvalue("habi","habion")
+
+
+
+
         self.lastexp = 0
         self.isfirstrun = 1 #A flag for to detect if this is the first run of the loop or not...
         self.LAST_GEM_CHECK_TIME = 1 #Buffer to store the last time we checked for gems on stage

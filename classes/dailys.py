@@ -353,6 +353,12 @@ class dailys:
         html = self.acc.post("http://www.neopets.com/games/giveaway/process_giveaway.phtml",postdata,"http://images.neopets.com/games/g905_v3_99390.swf")
         filename = "Qas" + self.acc.user + '_' +  str(time.time())
 
+        if html.find('ccess=0'): #Success=0 , log nothing
+            return 1
+
+
+
+
         self.writestringtofile(filename,html)
 
 
@@ -426,8 +432,13 @@ class dailys:
         html = self.acc.get("http://www.neopets.com/worlds/geraptiku/process_tomb.phtml","http://www.neopets.com/worlds/geraptiku/tomb.phtml")
         filename = "Dtomb_" + self.acc.user + '_' +  str(time.time())
 
-        if html.find('must be at least') > 1:
+        if html.find('must be at least') > 1: #Account not old enough , skip
             return 1
+
+        if html.find('excitement for one day') > 1:#Already done , skip
+            return 1
+
+
         self.writestringtofile(filename,html)
 
 

@@ -23,3 +23,5 @@ class battle:
     def startbattle(enemyname):
         #Start a battle with X enemy and load battle logic from ./list/battle/logic/enemyname.txt
         print "Loading battle logic for " + enemyname
+
+

@@ -25,19 +25,18 @@ class InventoryManager:
        # self.newsql = newsql
         self.filterlist = []
         self.filterlist = self.fetchfilterlist(settigsfile)
+        self.invenotrymanageron =self.settingsmanager.getvalue("Settings","autodeposititems")
         self.lastsdbticktime = self.settingsmanager.getvalue("timecache","lastsdbtime")
 
     def checktick(self):
         #Checks if a sdb tick is needed
-        doneone=0
-        if (time.time() - float(self.lastsdbticktime) > 3600): #SdbTime (1 hour checks)
 
 
-            self.lastsdbticktime = time.time()
-            self.settingsmanager.setvalue("timecache","lastsdbtime" , self.lastsdbticktime )
-            self.Depositall()
-            doneone=1
-        return doneone
+        self.lastsdbticktime = time.time()
+        self.settingsmanager.setvalue("timecache","lastsdbtime" , self.lastsdbticktime )
+        self.Depositall()
+
+        return
 
 
     def getrawfilterlist(self):
@@ -71,12 +70,12 @@ class InventoryManager:
             currentitemname = splititems[0] #Itemname
             currentitemfilter = splititems[1]
             if (currentitemname == itemname): #Clash found
-                print "Clash found for item " + currentitemname
+
                 thereturn = splititems[1]
         return thereturn #Return either "None" or the filter if the item matched a filter
 
     def test(self):
-        print "Inventory manager - TEst"
+
         self.filterlist = self.getrawfilterlist()
         #Loop each item in the filter list to find its name...
         for items in self.filterlist:
@@ -85,20 +84,23 @@ class InventoryManager:
         print self.filterlist
 
     def Depositall(self):
-        html=self.acc.get("http://www.neopets.com/quickstock.phtml?buyitem=0","http://www.neopets.com/quickstock.phtml")
+        html=self.acc.get("http://www.neopets.com/quickstock.phtml","http://www.neopets.com/quickstock.phtml")
         arrynum=1
         self.itemcollection=[]
         startopos3 = 0
         postdata = {}
         postdata["buyitem"] = "0"
 
-        #self.itemdblogic(html)
-        #print html
+        self.lastsdbticktime = time.time()
+        self.settingsmanager.setvalue("timecache","lastsdbtime" , self.lastsdbticktime )
+
         print "Deposit all Logic"
         startopos3 = html.find('<b>Shed</b>') +7
         endpos = startopos3
         outputurl = "http://www.neopets.com/process_quickstock.phtml"
+
         while html.find("id_arr[",startopos3) > 1:
+
             theitemid="0"
             theitemname=""
             startpos = html.find("id_arr[",startopos3) #Few words before id
@@ -120,19 +122,30 @@ class InventoryManager:
                         print thefilter
                         if not thefilter == None:
 
-                            #print "Clash Found2" + str(theitemname)
 
-
-
-                            #Where should we send this item?
                             if thefilter == "shop": #The filter in lowercase to prevent a mismatch
-                                print "clash2"
+
                                 postdata["id_arr[" + str(arrynum) + "]"] = html[startpos2:endpos]
                                 postdata["radio_arr[" + str(arrynum) + "]"] = "stock" #This items going to the users shop
                                 self.itemcollection = self.itemcollection + ["&id_arr[" + str(arrynum) + "]=" + html[startpos2:endpos] + "&radio_arr[" + str(arrynum) + "]=deposit"]
                                 arrynum = arrynum + 1
+
+                            elif thefilter == "donate": #donate item to  money tree
+                                postdata["id_arr[" + str(arrynum) + "]"] = html[startpos2:endpos]
+                                postdata["radio_arr[" + str(arrynum) + "]"] = "donate" #This items going to the users shop
+                                self.itemcollection = self.itemcollection + ["&id_arr[" + str(arrynum) + "]=" + html[startpos2:endpos] + "&radio_arr[" + str(arrynum) + "]=deposit"]
+                                arrynum = arrynum + 1
+                            elif thefilter == "discard": #discard item
+                                postdata["id_arr[" + str(arrynum) + "]"] = html[startpos2:endpos]
+                                postdata["radio_arr[" + str(arrynum) + "]"] = "discard" #This items going to the users shop
+                                self.itemcollection = self.itemcollection + ["&id_arr[" + str(arrynum) + "]=" + html[startpos2:endpos] + "&radio_arr[" + str(arrynum) + "]=deposit"]
+                                arrynum = arrynum + 1
+
                         else:
-                                #print "No filter , sending to sdb" + thefilter.lower
+
+
+                            print thefilter
+                                #None set , so send to sdb
                             postdata["id_arr[" + str(arrynum) + "]"] = html[startpos2:endpos]
                             postdata["radio_arr[" + str(arrynum) + "]"] = "deposit"
                             self.itemcollection = self.itemcollection + ["&id_arr[" + str(arrynum) + "]=" + html[startpos2:endpos] + "&radio_arr[" + str(arrynum) + "]=deposit"]
@@ -142,30 +155,7 @@ class InventoryManager:
         #print postdata
         html = self.acc.post(outputurl, postdata ,"http://www.neopets.com/quickstock.phtml")
         #print html
-        if  html.find('You are trying to move items into a shop') > 1:
-            #No shop found make one...
-            #print self.acc.user + "'s shop
-            #print "TESSSSTT"
-            postdata = {'shop_name': self.acc.user + "'s shop",
-                       'shop_world': "0",
-                       'description': "Welcome+to+my+shop+",
-                       'remLen': "3981",
-                       'shopkeeper_name': "Shoppy+McShopFace",
-                       'shopkeeper_greeting': "Hello+my+freind+thankyou+for+visiting"
-                        }
 
-            html2 = self.acc.post("http://www.neopets.com/process_market.phtml", postdata ,"http://www.neopets.com/market.phtml?type=edit")
-            #print html2
-            if (html2.find("Neopoints to open your own shop") > 1): #Not enough np
-
-                time.sleep(5)
-               # print "NOOOOO"
-                return 0 #Return 0 so we dont get stuck in a loop
-            else:
-                # print html2
-                 time.sleep(5)
-                 self.Depositall() #Recall this function now a shop is made
-            #print html
 
 
 

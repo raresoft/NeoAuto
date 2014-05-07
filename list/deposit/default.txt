@@ -1,1 +1,3 @@
 One Dubloon Coin:shop
+Bagguss:donate
+Tchea Fruit:discard

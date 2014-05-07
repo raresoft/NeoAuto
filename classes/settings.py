@@ -36,13 +36,23 @@ class settings:
             default_Wheel_medio_on = self.getDefaultvalue('Dailys','Wheel_medio_on')
             default_wheel_knolon_on = self.getDefaultvalue('Dailys','wheel_knolon_on')
             default_Qasalan_on = self.getDefaultvalue('Dailys','Qasalan_on')
+            default_hotelmode= self.getDefaultvalue('hotel','mode')
 
-            default_loglevel = self.getDefaultvalue('misc','loglevel')
+
+
+
+            default_habion = self.getDefaultvalue('habi','habion')
+
+
+            default_autohotel = self.getDefaultvalue('hotel','autohotel')
             default_avatargrabber = self.getDefaultvalue('misc','avatargrabber')
 
-
+            default_loglevel = self.getDefaultvalue('misc','loglevel')
 
             default_ancor_on = self.getDefaultvalue('Dailys','ancor_on')
+
+
+            default_lasthoteltime = self.getDefaultvalue('timecache','lasthoteltime')
 
             default_lastQasatime = self.getDefaultvalue('timecache','lastQasatime')
             default_minnponhand = self.getDefaultvalue('bank','minnponhand')
@@ -82,6 +92,9 @@ class settings:
 
             default_usemobileservices = self.getDefaultvalue('Settings','usemobileservices')
 
+
+            default_autodeposititems = self.getDefaultvalue('Settings','autodeposititems')
+
             default_sellist = self.getDefaultvalue('Settings','depositlist')
             default_lastSDBtime = self.getDefaultvalue('timecache','lastSDBtime')
 
@@ -118,10 +131,10 @@ class settings:
             confighandler.add_section('misc')
             confighandler.add_section('bank')
             confighandler.add_section('trainer')
-
+            confighandler.add_section('habi')
             confighandler.add_section('games')
             confighandler.add_section('shop')
-
+            confighandler.add_section('hotel')
 
             confighandler.add_section('nq2')
             confighandler.add_section('Scratchcard')
@@ -150,6 +163,11 @@ class settings:
 
             confighandler.set('timecache','lastpricetime', default_lastpricetime)
             confighandler.set('timecache','lastQasatime', default_lastQasatime)
+
+            confighandler.set('timecache','lasthoteltime', default_lasthoteltime)
+
+
+
             confighandler.set('timecache','avatartime', default_lastavatartime)
             confighandler.set('bank','minnponhand', default_minnponhand)
             confighandler.set('bank','withdrawamount', default_withdrawamount)
@@ -166,7 +184,12 @@ class settings:
             confighandler.set('timecache','lastknoltime', default_lastknoltime)
 
 
+            confighandler.set('hotel','mode', default_hotelmode)
 
+
+            confighandler.set('habi','habion', default_habion)
+
+            confighandler.set('hotel','autohotel', default_autohotel)
             confighandler.set('nq2','nq2stage', "1")
             confighandler.set('nq2','nq2waypoint_x', "13")
             confighandler.set('nq2','nq2waypoint_y', "4")
@@ -203,6 +226,7 @@ class settings:
             confighandler.set('Dailys','fruit_on', default_fruit_on)
             confighandler.set('Settings','depositlist', default_depositlist)
             confighandler.set('Settings','usemobileservices', default_usemobileservices)
+            confighandler.set('Settings','autodeposititems', default_autodeposititems)
 
 
             confighandler.set('Scratchcard','scratch_mode', default_scratch_mode)

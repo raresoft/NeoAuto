@@ -34,6 +34,10 @@ from classes.dailys import dailys
 from classes.habi import habi
 from classes.mobileservices import mobileservices
 from classes.nomobileservices import nomobileservices
+from classes.hotel import hotel
+
+
+
 
 from classes.shopmanager import shopmanager
 
@@ -97,16 +101,15 @@ def dologin(debugmode=1): #Debug mode is optional and set to 1 by default
 
 
 acc = dologin(Dodebugmode) #Do login trys to login and returns a new instance of NeoAccount
-habihander = habi(acc,pyamfhandler,proxy) #Setup habi hander module
-#Todo , Detect fails here
-#Add mobile login
+
 
 
 settingsmanager = settings(acc.user) #Load settings for this account , store data/class in sessionmanager
+habihander = habi(acc,pyamfhandler,proxy,settingsmanager) #Setup habi hander module
+
 depositfile =  settingsmanager.getvalue("Settings","depositlist") #Deposit list items
 doaltador =settingsmanager.getvalue("misc","altador_on") #Altador on off switch
 inventorymanager = InventoryManager(acc,depositfile,settingsmanager)
-#we logged into a account so lets load settings...
 shopmanager = shopmanager (acc,settingsmanager)
 lastlogintime = time.time()
 
@@ -120,7 +123,7 @@ if not mobilehandler.usemobileservices == 'on': #mobile handler = off , so sets 
 
 
 
-
+hotelmanager =  hotel(acc,settingsmanager,mobilehandler) #Lol hotelmanager i made a funny...... I'll see myself out
 bankhandler = bankmanager(acc,mobilehandler,settingsmanager)
 althandler = altador(acc,settingsmanager,bankhandler)
 gamerunnerhandler =  gamerunner(acc,settingsmanager,mobilehandler) #Setup dailys hander module
@@ -134,48 +137,72 @@ test = 1
 while test ==1:
 
 
-    #Auto Battle class..... Coming next version probly , code is left in as i noticed a bug in last version before finishing
+
+
+
+    try:
+        #Auto Battle class..... Coming next version probly , code is left in as i noticed a bug in last version before finishing
+
+
+
+        if hotelmanager.autohotel_on == 'on':
+            if (time.time() - float(hotelmanager.lasthoteltime) > 86400): #Auto hotel check every day
+                hotelmanager.dotick()
 
 
 
 
-    if shopmanager.withdrawtill == 'on':
-        if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
-            shopmanager.checktill()
-
-    if shopmanager.autoprice_on == 'on':
-        if (time.time() - float(shopmanager.lastpricetime) > 900): #price items every half hour
-            shopmanager.priceitems()
-
-
-
-    if avatarhandler.avataron == 'on':
-        if (time.time() - float(avatarhandler.lastavatartime) > 300): #grab a avatar every 5 mins
-            avatarhandler.getavatar()
+        if inventorymanager.invenotrymanageron == 'on':
+            if (time.time() - float(inventorymanager.lastsdbticktime) > 300): #Invenotry manager check every 5 mins
+                inventorymanager.Depositall()
 
 
 
 
-    if doaltador == 'on':
-        if althandler.DoTick() == 999:#Done if 999
-            doaltador ='off'
+        if shopmanager.withdrawtill == 'on':
+            if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
+                shopmanager.checktill()
 
-    gamerunnerhandler.rungames()
+        if shopmanager.withdrawtill == 'on':
+            if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
+                shopmanager.checktill()
 
-
-    if dailyshander.DoTick(mobilehandler) == 0:# Nothing was done
-
-        if inventorymanager.checktick() == 1:#Check if a Deposit all tick is needed  , return 0 if not
-            #Nothing done fall back to next task
-            print "Processed SDB tick"
-
-        else:
-        #habi disabled in this version , re-add it urself using old habi.py if need be , I want to recode this soon
+        if shopmanager.autoprice_on == 'on':
+            if (time.time() - float(shopmanager.lastpricetime) > 900): #price items every half hour
+                shopmanager.priceitems()
 
 
-            #We did nothing at all , fallback to habi
-          # print "Should do habi here"
-           habihander.DoLoop()
-           time.sleep(30)
+
+        if avatarhandler.avataron == 'on':
+            if (time.time() - float(avatarhandler.lastavatartime) > 300): #grab a avatar every 5 mins
+                avatarhandler.getavatar()
 
 
+
+
+        if doaltador == 'on':
+            if althandler.DoTick() == 999:#Done if 999
+                doaltador ='off'
+
+        gamerunnerhandler.rungames()
+
+
+        if dailyshander.DoTick(mobilehandler) == 0:# Nothing was done
+
+            if inventorymanager.checktick() == 1:#Check if a Deposit all tick is needed  , return 0 if not
+                #Nothing done fall back to next task
+                print "Processed SDB tick"
+
+            else:
+
+
+
+
+               if habihander.habi_on == 'on':
+                   habihander.DoLoop()
+                   time.sleep(30)
+
+    except:
+        time.sleep(10)
+        continue
+#
