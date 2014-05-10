@@ -115,7 +115,7 @@ class cliffhanger:
     def skipoldgame(self,targetletters):
         if targetletters.find("='red'")>1:
             #A game is already in progress on load and letters have been sent , I did not code logic for this so just end the game by sending a random bad string
-            print 'old game found ending'
+          #  print 'old game found ending'
 
             random.shuffle(knownlist)
             randitem = knownlist[0]# a random item in the known list
@@ -128,7 +128,7 @@ class cliffhanger:
         #Play a single game till finish
         startnp = self.mobilehandler.getnp()
 
-        print 'Cliffhanger - Tick'
+        #print 'Cliffhanger - Tick'
         html = self.acc.get('http://www.neopets.com/games/cliffhanger/cliffhanger.phtml')
 
         knownlist = self.fetchfilterlist()
@@ -145,17 +145,17 @@ class cliffhanger:
 
         if matchpatterval == []:
 
-            print 'Uknown cliffhanger pattern , skipping..'
+         #   print 'Uknown cliffhanger pattern , skipping..'
             random.shuffle(knownlist)
             randitem = knownlist[0]# a random item in the known list
             postdata = {'solve_puzzle' : randitem}
             html=self.acc.post('http://www.neopets.com/games/cliffhanger/process_cliffhanger.phtml',postdata)
-            print html
+          #  print html
         else:
 
             postdata = {'solve_puzzle' : matchpatterval[0]}
             html=self.acc.post('http://www.neopets.com/games/cliffhanger/process_cliffhanger.phtml',postdata)
-            print 'solved a puzzle'
+            print 'Cliff Hanger - Solved a puzzle'
             endnp = self.mobilehandler.getnp()
             if startnp == endnp: #np did not increase
                 print'Ciff hanger stopped earning np so exited'

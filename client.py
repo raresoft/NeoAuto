@@ -144,21 +144,14 @@ while test ==1:
   #  continue
 #
 
-    try:
+ #   try:
+        if not dailyshander.DoTick(mobilehandler) == 0:
+            continue #Done something so exit
 
-
-
-
-        if battlemanager.battle_on == 'on':
-            if (time.time() - float(battlemanager.lastbattletime) > 86400): #Auto Battle check everyday (time only updates when we stope earning prizes)
-                battlemanager.dotick()
-                print 'Battle manager'
+        if traininghandler.trainingon == 'on':
+            if (time.time() - float(traininghandler.lasttraintime) > 180): #Auto train check every 3 mins
+                traininghandler.dotick()
                 continue #Done something so exit
-
-            #We did nothing if this runs.. so check for punchbag bob and process it if needed
-            if battlemanager.punchbag_on == 'on':
-                #Check is needed by the user
-                battlemanager.startpunchbag()
 
 
 
@@ -168,6 +161,27 @@ while test ==1:
             if (time.time() - float(hotelmanager.lasthoteltime) > 86400): #Auto hotel check every day
                 hotelmanager.dotick()
                 continue #Done something so exit
+
+        if battlemanager.battle_on == 'on':
+            if (time.time() - float(battlemanager.nextbattletime) > 86400): #Auto Battle check everyday (time only updates when we stope earning prizes)
+                if battlemanager.dotick() == 1: #Won battle
+                    nextbattletime = time.time() + 300
+                    settingsmanager.setvalue("timecache","nextbattletime" , nextbattletime )
+                    continue #Done something so exit
+                    print 'Battle manager'
+
+
+
+            #We did nothing if this runs.. so check for punchbag bob and process it if needed
+            if battlemanager.punchbag_on == 'on':
+                #Check is needed by the user
+                battlemanager.startpunchbag()
+
+
+                continue #Done something so exit
+
+
+
 
 
 
@@ -208,13 +222,12 @@ while test ==1:
         gamerunnerhandler.rungames()
 
 
-        if dailyshander.DoTick(mobilehandler) == 0:# Nothing was done
 
-               if habihander.habi_on == 'on':
-                   habihander.DoLoop()
-                   time.sleep(30)
+        if habihander.habi_on == 'on':
+           habihander.DoLoop()
+           time.sleep(30)
 
-    except:
-        time.sleep(10)
-        continue
+ #   except:
+ #       time.sleep(10)
+   #     continue
 #

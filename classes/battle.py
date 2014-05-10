@@ -11,7 +11,7 @@ class battle:
         self.mobilehandler = mobilehandler
         self.settingsmanager = settingsmanager
         self.enemyname = self.settingsmanager.getvalue("battle","enemyname")
-        self.lastbattletime = self.settingsmanager.getvalue("timecache","lastbattletime")
+        self.nextbattletime = self.settingsmanager.getvalue("timecache","nextbattletime")
         self.battle_on = self.settingsmanager.getvalue("battle","battle_on")
         self.punchbag_on = self.settingsmanager.getvalue("battle","punchbagbob")
 
@@ -64,24 +64,42 @@ class battle:
 
     def getitemid(self,html,itemname):
         #Finds a item id on the battle html , by searching for a itemname
-        pos1= html.find(itemname)
+
+
+
+
+        lowercaseitemname = itemname.lower()
+        html = html.lower()
+        pos1= html.find(lowercaseitemname)
         cleanhtml = html.replace('"' , "'")
         pos2 = cleanhtml.find("id='",pos1)+4
         pos3 = cleanhtml.find("'",pos2+2)
+        print 'Battle id - ' + html[pos2:pos3]
         return html[pos2:pos3]
+
+
+
+
+
     def getbestweapon(self):
+
         #Loads the battle list in \NeoAuto\list\battle\battleitems.txt
         #items at top get priority
-        print 'Best weapon'
+       # print 'Best weapon'
         html = self.acc.get('http://www.neopets.com/dome/arena.phtml')
         weaponlist = self.fetchfilterlist('./list/battle/battleitems.txt')
+      #  print 'weapinlist =' + str(weaponlist)
         pos1 = self.acc.cleanhtml.find("p1equipment'>")
         pos2 = html.find('fsright',pos1)
         trimhtml = html[pos1:pos2]
-        #print trimhtml
+       # print trimhtml
+       # sys.exit()
+
         retlist = []
         for weapon in weaponlist:
-            if trimhtml.find(weapon) > 1: #Weapon found in html , add it to list
+            currentweapon = str(weapon.lower())
+            trimhtml = trimhtml.lower()
+            if trimhtml.find(currentweapon) > 1:
                 retlist.append(weapon)
 
             #We found multiple matching items in our pets eq list so use both
@@ -108,7 +126,9 @@ class battle:
     def dotick(self,enemyname =''):
 
         battlehtml = self.acc.get('http://www.neopets.com/dome/arena.phtml')
+
         if self.getbattlestate(battlehtml) == 'inbattle':
+           # print 'test1'
             pos1 = battlehtml.find("p2name').html")
             pos2 = battlehtml.find("('",pos1) +2
             pos3 = battlehtml.find("');",pos2)
@@ -120,22 +140,27 @@ class battle:
 
 
             self.enemyconfig = ConfigParser.ConfigParser()
-            print 'enemyname' + enemyname
+          #  print 'enemyname' + enemyname
             self.enemyconfig.read("./list/battle/logic/" + enemyname + '.cfg')
             print "Getting battle state"
             if self.getvalue("attack","attacktype") == 'weapon':
                 weaponlist = self.getbestweapon()
+               # print weaponlist
                 if len(weaponlist) > 1:
+
                     #More than one item found , equip first two in list (best 2) and double attack
                     print 'Sending double attack'
                     item1name = weaponlist[0]
                     item2name = weaponlist[1]
-
+                    item1id = self.getitemid(battlehtml,item1name)
+                    item2id = self.getitemid(battlehtml,item2name)
 
                 elif len(weaponlist)  == 1:
+                    print 'Sending single attack'
+                    item1name = weaponlist[0]
+                    item2name = ''
                     item1id = self.getitemid(battlehtml,item1name)
                     item2id = ''
-
                 else:
                     # No weapons found
                     return
@@ -160,18 +185,29 @@ class battle:
                 print 'Enemy Hp = ' + self.getenemyhp(battlehtml)
                 newhtml =self.acc.post('http://www.neopets.com/dome/ajax/arena.php',postdata ,'http://www.neopets.com/dome/arena.phtml')
                 jsondata = json.loads(newhtml)
-                if jsondata['battle']['statusmsg'] == 'Winner: ':
-                    print 'Won battle...'
-                    for prize in jsondata['battle']:
-                        #self.battlecount = int(self.battlecount) + 1
-                        #self.settingsmanager.setvalue("battle","battlecount" , self.battlecount )
-                        if jsondata['battle']['prize_messages']:
-                            #Reached our limit for today
-                            print 'Battle limit reached for today'
-                            self.lastbattletime = time.time()
+                jsondatastr = str(jsondata['battle']) #We get the chunk to a string so we can use search functions on it
+                if jsondatastr.find('prize_messages') > 1:
+                    print 'Battle limit reached for today'
+                    self.nextbattletime = time.time() + 86400 #Wait for a day
 
-                            self.settingsmanager.setvalue("timecache","lastbattletime" , self.lastbattletime )
-                            return
+                    self.settingsmanager.setvalue("timecache","nextbattletime" , self.nextbattletime )
+                    return
+
+
+
+
+
+                if jsondatastr.find('Winner: ') > 1: #Battle is over :D
+                    prizestr = ''
+                    for prize in jsondata['battle']['prizes']:
+                        prizestr = prizestr + prize['name'] + "  "
+                   #  for prize in jsondata['battle']:
+
+                    print 'Auto battler won items : ' + prizestr
+                    return 1
+                   # if jsondata['battle']['prize_messages']:
+                            #Reached our limit for today
+
      #   self.lasthoteltime = time.time()
      #   self.settingsmanager.setvalue("timecache","lasthoteltime" , self.lasthoteltime )
 
@@ -181,12 +217,12 @@ class battle:
                 enemyname = self.enemyname
 
 
-             print 'enemyname' + enemyname
+             #print 'enemyname' + enemyname
              self.enemyconfig = ConfigParser.ConfigParser()
              self.enemyconfig.read("./list/battle/logic/" + enemyname + '.cfg')
              if  enemyname == '':
                 return
-             print "./list/battle/logic/" + enemyname + '.cfg'
+            # print "./list/battle/logic/" + enemyname + '.cfg'
              starthp = self.getvalue("health","starthp")
              enemydifficulty = self.getvalue("settings","enemydifficulty")
              targetpet = self.mobilehandler.activepetname

@@ -58,9 +58,10 @@ class settings:
             default_ancor_on = self.getDefaultvalue('Dailys','ancor_on')
             default_healingspings_on = self.getDefaultvalue('Dailys','healingsprings_on')
 
-            default_lastbattletime = self.getDefaultvalue('timecache','lastbattletime')
+            default_lastbattletime = self.getDefaultvalue('timecache','nextbattletime')
 
             default_lasthoteltime = self.getDefaultvalue('timecache','lasthoteltime')
+            default_lasttraintime = self.getDefaultvalue('timecache','lasttraintime')
 
 
 
@@ -197,9 +198,9 @@ class settings:
             confighandler.set('timecache','lasthealingspringstime', default_lasthealingspringstime)
 
 
-
+            confighandler.set('timecache','lasttraintime', default_lasttraintime)
             confighandler.set('timecache','lasthoteltime', default_lasthoteltime)
-            confighandler.set('timecache','lastbattletime', default_lastbattletime)
+            confighandler.set('timecache','nextbattletime', default_lastbattletime)
 
 
 

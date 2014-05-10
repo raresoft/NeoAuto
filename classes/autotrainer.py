@@ -1,7 +1,7 @@
 #train pets in acadamy (level 40-)
 
 
-
+import time
 
 class autotrainer:
     def __init__(self,acc,mobilehandler,settingsmanager,inventorymanager):
@@ -12,6 +12,7 @@ class autotrainer:
         self.trainingon = self.settingsmanager.getvalue("trainer","trainpets")
         self.trainingstat =  self.settingsmanager.getvalue("trainer","trainstat")
         self.trainmode =  self.settingsmanager.getvalue("trainer","trainmode")
+        self.lasttraintime =  self.settingsmanager.getvalue("timecache","lasttraintime")
 
         self.inventorymanager = inventorymanager
 
@@ -187,6 +188,8 @@ class autotrainer:
         #list?
 
         themode = self.trainmode.lower()
+        self.lasttraintime = time.time()
+        self.settingsmanager.setvalue("timecache","lasttraintime" , self.lasttraintime )
         if themode == 'activepet':
             #train the active pet
             self.dopettick(self.mobilehandler.activepetname)
