@@ -35,6 +35,7 @@ from classes.habi import habi
 from classes.mobileservices import mobileservices
 from classes.nomobileservices import nomobileservices
 from classes.hotel import hotel
+from classes.battle import battle
 
 
 
@@ -44,7 +45,7 @@ from classes.shopmanager import shopmanager
 
 from classes.altadorauto import altador
 from classes.bankmanager import bankmanager
-#from classes.autotrainer import autotrainer
+from classes.autotrainer import autotrainer
 from classes.avatar import avatar
 from classes.gamerunner  import gamerunner
 from classes.habi import habi
@@ -56,8 +57,9 @@ CJ=CookieJar() #Cookies
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(CJ))
 
 Dodebugmode = 1
-neouser = ""
-neopass = ""
+neouser = "" #Neopets username
+neopass = "" #Neopets password
+neopin = "" #Neopets pin number (if used , leave as "" if not used)
 proxy = "" #localhost:8888 or 123.123.123.123:8080 ect - "" for none
 
 if neouser == "":
@@ -82,10 +84,10 @@ def dologin(debugmode=1): #Debug mode is optional and set to 1 by default
 
 
     if proxy == "": #No proxy
-        theacc = NeoAccount(neouser,neopass)
+        theacc = NeoAccount(neouser,neopass,neopin)
     else: #if proxy is anything but "" , use it
 
-        theacc = NeoAccount(neouser,neopass,proxy)
+        theacc = NeoAccount(neouser,neopass,neopin,proxy)
 
 
     login_return = theacc.login() #Login here
@@ -121,14 +123,14 @@ mobilehandler = mobileservices (acc,settingsmanager) #Mobile services , uses a s
 if not mobilehandler.usemobileservices == 'on': #mobile handler = off , so sets our bot to replace mobilehandler with nomobilehandler
     mobilehandler = nomobileservices (acc,settingsmanager) #Mobile services , uses a seperate login to main neo
 
-
+battlemanager = battle(acc,mobilehandler,settingsmanager)
 
 hotelmanager =  hotel(acc,settingsmanager,mobilehandler) #Lol hotelmanager i made a funny...... I'll see myself out
 bankhandler = bankmanager(acc,mobilehandler,settingsmanager)
 althandler = altador(acc,settingsmanager,bankhandler)
 gamerunnerhandler =  gamerunner(acc,settingsmanager,mobilehandler) #Setup dailys hander module
 avatarhandler = avatar(acc,settingsmanager,mobilehandler)
-#traininghandler =autotrainer(acc,mobilehandler,settingsmanager)
+traininghandler =autotrainer(acc,mobilehandler,settingsmanager,inventorymanager)
 
 #bankhandler.checknpbalance() #Check we have enough np on hand once before run
 
@@ -137,47 +139,66 @@ test = 1
 while test ==1:
 
 
-
-
+   # battlemanager.dotick()
+   # time.sleep(10)
+  #  continue
+#
 
     try:
-        #Auto Battle class..... Coming next version probly , code is left in as i noticed a bug in last version before finishing
+
+
+
+
+        if battlemanager.battle_on == 'on':
+            if (time.time() - float(battlemanager.lastbattletime) > 86400): #Auto Battle check everyday (time only updates when we stope earning prizes)
+                battlemanager.dotick()
+                print 'Battle manager'
+                continue #Done something so exit
+
+            #We did nothing if this runs.. so check for punchbag bob and process it if needed
+            if battlemanager.punchbag_on == 'on':
+                #Check is needed by the user
+                battlemanager.startpunchbag()
+
+
 
 
 
         if hotelmanager.autohotel_on == 'on':
             if (time.time() - float(hotelmanager.lasthoteltime) > 86400): #Auto hotel check every day
                 hotelmanager.dotick()
-
+                continue #Done something so exit
 
 
 
         if inventorymanager.invenotrymanageron == 'on':
-            if (time.time() - float(inventorymanager.lastsdbticktime) > 300): #Invenotry manager check every 5 mins
+            if (time.time() - float(inventorymanager.lastsdbticktime) > 900): #Invenotry manager check every half hour
                 inventorymanager.Depositall()
 
-
+                continue #Done something so exit
 
 
         if shopmanager.withdrawtill == 'on':
             if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
                 shopmanager.checktill()
+                continue #Done something so exit
+
 
         if shopmanager.withdrawtill == 'on':
             if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
                 shopmanager.checktill()
-
+                continue #Done something so exit
         if shopmanager.autoprice_on == 'on':
             if (time.time() - float(shopmanager.lastpricetime) > 900): #price items every half hour
                 shopmanager.priceitems()
-
+                continue #Done something so exit
 
 
         if avatarhandler.avataron == 'on':
             if (time.time() - float(avatarhandler.lastavatartime) > 300): #grab a avatar every 5 mins
                 avatarhandler.getavatar()
 
-
+                continue #Done something so exit
 
 
         if doaltador == 'on':
@@ -188,15 +209,6 @@ while test ==1:
 
 
         if dailyshander.DoTick(mobilehandler) == 0:# Nothing was done
-
-            if inventorymanager.checktick() == 1:#Check if a Deposit all tick is needed  , return 0 if not
-                #Nothing done fall back to next task
-                print "Processed SDB tick"
-
-            else:
-
-
-
 
                if habihander.habi_on == 'on':
                    habihander.DoLoop()

@@ -15,12 +15,13 @@ class NeoAccount:
                 ('Accept-Language', 'en-us,en;q=0.5'),
                 ('Accept-Encoding', 'gzip, deflate')]
 
-    def __init__(self, user, pw, proxy = None):
+    def __init__(self, user, pw,neopin ,proxy = None):
         self.user = user
         self.pw = pw
         self.proxy = proxy
         self.referer = ''
         self.cleanhtml = ''
+        self.neopin = neopin
 
         self.cj = cookielib.LWPCookieJar()
         self.cookie_handler = urllib2.HTTPCookieProcessor(self.cj)

@@ -27,6 +27,12 @@ class settings:
             print "creating new cache file based on ./cache/default.cfg"
 
 
+            default_battle_on = self.getDefaultvalue('battle','battle_on')
+            default_battleenemyname = self.getDefaultvalue('battle','enemyname')
+            default_punchbagbob = self.getDefaultvalue('battle','punchbagbob')
+
+
+
 
             default_autoprice_file = self.getDefaultvalue('shop','autoprice_file')
             default_autoprice = self.getDefaultvalue('shop','autoprice')
@@ -50,15 +56,29 @@ class settings:
             default_loglevel = self.getDefaultvalue('misc','loglevel')
 
             default_ancor_on = self.getDefaultvalue('Dailys','ancor_on')
+            default_healingspings_on = self.getDefaultvalue('Dailys','healingsprings_on')
 
+            default_lastbattletime = self.getDefaultvalue('timecache','lastbattletime')
 
             default_lasthoteltime = self.getDefaultvalue('timecache','lasthoteltime')
+
+
+
+            default_lasthealingspringstime = self.getDefaultvalue('timecache','lasthealingspringstime')
+
+
 
             default_lastQasatime = self.getDefaultvalue('timecache','lastQasatime')
             default_minnponhand = self.getDefaultvalue('bank','minnponhand')
 
             default_withdrawamount = self.getDefaultvalue('bank','withdrawamount')
             default_traineron = self.getDefaultvalue('trainer','trainpets')
+            default_trainstat = self.getDefaultvalue('trainer','trainstat')
+            default_maxspeand = self.getDefaultvalue('trainer','maxspeand')
+
+
+            default_trainmode = self.getDefaultvalue('trainer','trainmode')
+
 
             default_lastshoptime = self.getDefaultvalue('timecache','lasttilltime')
 
@@ -96,7 +116,7 @@ class settings:
             default_autodeposititems = self.getDefaultvalue('Settings','autodeposititems')
 
             default_sellist = self.getDefaultvalue('Settings','depositlist')
-            default_lastSDBtime = self.getDefaultvalue('timecache','lastSDBtime')
+            default_lastSDBtime = self.getDefaultvalue('timecache','lastsdbticktime')
 
             default_withdrawamount = self.getDefaultvalue('bank','withdrawamount')
 
@@ -112,7 +132,7 @@ class settings:
             default_baga_on = self.getDefaultvalue('Dailys','baga_on')
             default_scratch_on = self.getDefaultvalue("Dailys","scratch_on")
             default_fruit_on = self.getDefaultvalue('Dailys','fruit_on')
-            default_scratch_mode = self.getDefaultvalue('Scratchcard','scratch_mode')
+         #   default_scratch_mode = self.getDefaultvalue('Scratchcard','scratch_mode')
             default_lastalton = self.getDefaultvalue('misc','altador_on')
             default_altador_stage = self.getDefaultvalue('misc','altador_stage')
 
@@ -127,6 +147,8 @@ class settings:
             # add the settings to the structure of the file, and lets write it out...
             confighandler.add_section('Dailys')
 
+
+            confighandler.add_section('battle')
             confighandler.add_section('Settings')
             confighandler.add_section('misc')
             confighandler.add_section('bank')
@@ -137,7 +159,7 @@ class settings:
             confighandler.add_section('hotel')
 
             confighandler.add_section('nq2')
-            confighandler.add_section('Scratchcard')
+         #   confighandler.add_section('Scratchcard')
             confighandler.add_section('timecache')
             #elf.altador_on = self.getvalue("misc","altador_on")
 
@@ -153,6 +175,14 @@ class settings:
             confighandler.set('shop','withdrawtill', default_withdrawtill)
             confighandler.set('shop','autoprice', default_autoprice)
             confighandler.set('shop','autoprice_file', default_autoprice_file)
+            confighandler.set('battle','enemyname', default_battleenemyname)
+            confighandler.set('battle','punchbagbob', default_punchbagbob)
+
+
+
+            confighandler.set('battle','battle_on', default_battle_on)
+
+
 
             confighandler.set('timecache','lastsnowagertime', default_lastsnowagertime)
             confighandler.set('timecache','lasttombtime', default_lasttombtime)
@@ -164,7 +194,12 @@ class settings:
             confighandler.set('timecache','lastpricetime', default_lastpricetime)
             confighandler.set('timecache','lastQasatime', default_lastQasatime)
 
+            confighandler.set('timecache','lasthealingspringstime', default_lasthealingspringstime)
+
+
+
             confighandler.set('timecache','lasthoteltime', default_lasthoteltime)
+            confighandler.set('timecache','lastbattletime', default_lastbattletime)
 
 
 
@@ -172,8 +207,12 @@ class settings:
             confighandler.set('bank','minnponhand', default_minnponhand)
             confighandler.set('bank','withdrawamount', default_withdrawamount)
             confighandler.set('trainer','trainpets', default_traineron)
+            confighandler.set('trainer','trainstat', default_trainstat)
 
 
+            confighandler.set('trainer','maxspeand', default_maxspeand)
+
+            confighandler.set('trainer','trainmode', default_trainmode)
 
 
             confighandler.set('timecache','nextscratchtime', default_nextscratchtime)
@@ -208,6 +247,7 @@ class settings:
 
 
 
+            confighandler.set('Dailys','healingsprings_on', default_healingspings_on)
             confighandler.set('Dailys','fishing_on', default_fishing_on)
             confighandler.set('Dailys','Wheel_medio_on', default_Wheel_medio_on)
             confighandler.set('Dailys','coco_on', default_coco_on)
@@ -229,10 +269,10 @@ class settings:
             confighandler.set('Settings','autodeposititems', default_autodeposititems)
 
 
-            confighandler.set('Scratchcard','scratch_mode', default_scratch_mode)
+         #   confighandler.set('Scratchcard','scratch_mode', default_scratch_mode)
 
 
-            confighandler.set('timecache','lastSDBtime', default_lastSDBtime)
+            confighandler.set('timecache','lastsdbticktime', default_lastSDBtime)
 
 
             with open("./cache/" + username + ".cfg",'w') as cfgfile:

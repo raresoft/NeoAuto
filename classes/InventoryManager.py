@@ -26,17 +26,98 @@ class InventoryManager:
         self.filterlist = []
         self.filterlist = self.fetchfilterlist(settigsfile)
         self.invenotrymanageron =self.settingsmanager.getvalue("Settings","autodeposititems")
-        self.lastsdbticktime = self.settingsmanager.getvalue("timecache","lastsdbtime")
+        self.lastsdbticktime = self.settingsmanager.getvalue("timecache","lastsdbticktime")
+        self.maxspeand = self.settingsmanager.getvalue("trainer","maxspeand")
 
-    def checktick(self):
-        #Checks if a sdb tick is needed
+    def searchinvenotry(self,itemname):
+        html = self.acc.get('http://www.neopets.com/quickstock.phtml')
+        if html.find(itemname) > 1:
+            return True
+        else:
+            return False
 
 
-        self.lastsdbticktime = time.time()
-        self.settingsmanager.setvalue("timecache","lastsdbtime" , self.lastsdbticktime )
-        self.Depositall()
 
-        return
+
+    def findlowestshopwizprice(self,itemname,maxspeand=9999):
+        #Search shop wizard for a item , get the first results buy url
+        #print "test= " + maxspeand
+        itemname = itemname.replace('+' , ' ' ) #We want spaces in the itemname this time around , not + symbols (neopets programmers are inconsistant with this)
+
+
+        postdata = {}
+        postdata["type"] = "process_wizard"
+        postdata["feedset"] = "0"
+        postdata["shopwizard"] = itemname
+        postdata["table"] = "shop"
+        postdata["criteria"] = "exact"
+        postdata["min_price"] = "0"
+        postdata["max_price"] = str(maxspeand)
+
+
+        html=self.acc.post("http://www.neopets.com/market.phtml" , postdata , "http://www.neopets.com/market.phtml?type=wizard")
+      #  html = self.acc.post('http://www.neopets.com/market.phtml',postdata,'http://www.neopets.com/market.phtml?type=wizard')
+        if html.find('browseshop.phtml?owner=') > 1:
+            #A item was found matching our search , get the first entrys buy url
+            pos1 = html.find('browseshop.phtml?owner=')
+            pos2 = self.acc.cleanhtml.find("'",pos1)
+            buyurl = 'http://www.neopets.com/' + html[pos1:pos2]
+            return buyurl
+        else:
+            print "item not found on shop wizard"
+            return ''
+    def shopwizardbuy(self,buyurl,itemname):
+        #We are on a users shop page , from here we get the first item from the html (the matching item from shop wiz , and buy it)
+        #Return 1 on success
+        html = self.acc.get(buyurl)
+        itemname = itemname.replace('+' ,' ')
+        if not html.find(itemname) > 1: #Make sure item is still there , so we dont buy a invalid item
+            print 'ret'
+            return 0
+        finalbuyurlpos1 = html.find('buy_item.phtml?lower=0')
+        finalbuyurlpos2 = self.acc.cleanhtml.find("'",finalbuyurlpos1)
+        finalbuyurl = 'http://www.neopets.com/' + html[finalbuyurlpos1:finalbuyurlpos2]
+        finalhtml = self.acc.get(finalbuyurl,buyurl)
+        if not html.find('Item not found') > 1: #We got the item.. (More checks needed here for not enough np ect)
+            return 1
+        else:
+            #We did not get the item
+            return 0
+
+
+        print finalhtml
+
+
+    def removefromsdb(self,itemname):
+        #Search for a item by name and if found remove it from sdb to inventory
+        itemname = itemname.replace(' ', '+')
+        html = self.acc.get('http://www.neopets.com/safetydeposit.phtml?obj_name=' + itemname + '&category=0' , 'http://http://www.neopets.com/safetydeposit.phtml')
+        if html.find('Not finding any items with that') > 1:
+            print "ITEM NOT FOUND IN SDB"
+            theret = self.findlowestshopwizprice(itemname,self.maxspeand)
+            if not theret == "":
+                print "Buying item from show wizard..."
+                if (self.shopwizardbuy(theret,itemname)) == 1:
+                    self.searchinvenotry(itemname)
+                    #We got a item , search invenotry for it
+            #print htmlhttp://www.neopets.com/safetydeposit.phtml
+        else:
+            print itemname + ' found in sdb'
+            #Get the item id...
+            pos1 = html.find('onClick=passPin')
+            pos2 = html.find (',',pos1) + 1
+            pos3 = html.find (',',pos2)
+            itemid = html[pos2:pos3]
+
+            #Is pin needed:
+            if html.find('PIN number') > 1:
+                html = self.acc.get('http://www.neopets.com/process_safetydeposit.phtml?remove_one_object=' + itemid  + '&offset=0&obj_name=' + itemname + '&catergory=0&pin=' + self.acc.neopin)
+            else:
+                #no pin needed
+                html = self.acc.get('http://www.neopets.com/process_safetydeposit.phtml?remove_one_object=' + itemid  + '&offset=0&obj_name=' + itemname + '&catergory=0&pin=')
+
+
+
 
 
     def getrawfilterlist(self):
@@ -92,7 +173,7 @@ class InventoryManager:
         postdata["buyitem"] = "0"
 
         self.lastsdbticktime = time.time()
-        self.settingsmanager.setvalue("timecache","lastsdbtime" , self.lastsdbticktime )
+        self.settingsmanager.setvalue("timecache","lastsdbticktime" , self.lastsdbticktime )
 
         print "Deposit all Logic"
         startopos3 = html.find('<b>Shed</b>') +7
@@ -117,9 +198,9 @@ class InventoryManager:
             if not startpos5 == -1:
                 ##if not theitemkey == "0":
                     if not theitemname == "":
-                        print "rdd"
+
                         thefilter = self.GetItemFilterByname(theitemname)
-                        print thefilter
+
                         if not thefilter == None:
 
 
@@ -150,6 +231,16 @@ class InventoryManager:
                             postdata["radio_arr[" + str(arrynum) + "]"] = "deposit"
                             self.itemcollection = self.itemcollection + ["&id_arr[" + str(arrynum) + "]=" + html[startpos2:endpos] + "&radio_arr[" + str(arrynum) + "]=deposit"]
                             arrynum = arrynum + 1
+
+
+
+
+
+
+
+
+
+
 
 
         #print postdata

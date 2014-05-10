@@ -227,10 +227,19 @@ class shopmanager:
         tillamount_clean = tillamount_raw.replace(",","")
         if int(tillamount_clean) > 0:
             print "Withdrawing " + tillamount_raw + " neopoints, from your shop till!"
-            postdata = {'type' : 'withdraw' ,
-                'amount' : tillamount_clean}
+            postdata ={}
+            #Check if we need  a pin
+            if html.find('Enter your')>1:
+                postdata = {'type' : 'withdraw' ,
+                'amount' : tillamount_clean,
+                'pin' : self.acc.neopin}
+                html=self.acc.post('http://www.neopets.com/process_market.phtml',postdata,'http://www.neopets.com/market.phtml?type=till')
+            else:
+            #No pin needed...
+                postdata = {'type' : 'withdraw' ,
+                            'amount' : tillamount_clean}
 
-            html=self.acc.post('http://www.neopets.com/process_market.phtml',postdata,'http://www.neopets.com/market.phtml?type=till')
+                html=self.acc.post('http://www.neopets.com/process_market.phtml',postdata,'http://www.neopets.com/market.phtml?type=till')
 
         self.lasttilltime = time.time()
         self.settingsmanager.setvalue("timecache","lasttilltime" , self.lasttilltime )

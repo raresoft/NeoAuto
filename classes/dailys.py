@@ -32,13 +32,18 @@ class dailys:
         self.medio_on = self.settingsmanager.getvalue("Dailys","Wheel_medio_on")
         self.knol_on = self.settingsmanager.getvalue("Dailys","wheel_knolon_on")
         self.Qasalan_on = self.settingsmanager.getvalue("Dailys","Qasalan_on")
+        self.lastfishingtime=  self.settingsmanager.getvalue("timecache","lastfishingtime")
 
-
+        self.springson = self.settingsmanager.getvalue("Dailys","healingsprings_on")
 
         #Last / next times , I should convert these to next times really to give more accuracy
         #Over things like a kiosk being closed (if its closed only delay for 15 mins for e.g and retry)
         #I have done this in some places but not all
         self.lastQasatime = self.settingsmanager.getvalue("timecache","lastQasatime")
+        self.lasthealingspringstime = self.settingsmanager.getvalue("timecache","lasthealingspringstime")
+
+
+
 
         self.bagatelletime = self.settingsmanager.getvalue("timecache","lastbagatelletime")
         self.lasttombtime = self.settingsmanager.getvalue("timecache","lasttombtime")
@@ -67,12 +72,25 @@ class dailys:
 
 
 
+        if self.springson ==  "on": #Healing springs
+            if (time.time() - float(self.lasthealingspringstime)  > 1800): #Every 30 mins
+                self.process_springs()
+                self.lasthealingspringstime = time.time()
+                self.settingsmanager.setvalue("timecache","lasthealingspringstime" , self.lasthealingspringstime )
+                runone=1
+
+                return runone
         if self.scratch_on ==  "on": #scards
-            if (time.time() > float(self.nextscratchtime) ): #Next time depends on card type here
+            if (time.time() > float(self.nextscratchtime) ): #Next time depends on card type here (every hour)
                 self.process_scratchcard()
                 runone=1
 
                 return runone
+
+
+
+#lasthealingspringstime
+
 
         if self.snowageron ==  "on": #Snowager
             if (time.time() - float(self.lastnowagertime) > 3600): #Snowager (every hour)
@@ -231,23 +249,23 @@ class dailys:
 
 
 #Known logic so far...
-        if html.find('<b>100 NP<br/>'):
+        if html.find('<b>100 NP<br/>') > 1:
             self.loghandler.writestringtofile(self.acc.user,'Wheel of medio - Won 100 NP',0)
             return 1
-        elif html.find('<b>1,000 NP<br/>'):
+        elif html.find('<b>1,000 NP<br/>') > 1:
             self.loghandler.writestringtofile(self.acc.user,'Wheel of medio - Won 1,000 NP',1)
             return 1
         elif html.find('Pterodactyl'):
             return 1
-        elif html.find('<b>2,000 NP<br/>'):
+        elif html.find('<b>2,000 NP<br/>') > 1:
             self.loghandler.writestringtofile(self.acc.user,'Wheel of medio - Won 2,000 NP',1)
 
             return 1
 
-        elif html.find('<b>500 NP<br/>'):
+        elif html.find('<b>500 NP<br/>') > 1:
             self.loghandler.writestringtofile(self.acc.user,'Wheel of medio - Won 100 NP',1)
             return 1
-        elif html.find('Neopoints to spin this Wheel!'):
+        elif html.find('Neopoints to spin this Wheel!') > 1:
             #If the user has option keepnp on hand = True then this should never happen if it does , then they do not have this option on
             #and have turned off withdraw np so just exit and wait
             return 1
@@ -289,10 +307,10 @@ class dailys:
         filename = "WheelOfknol" + self.acc.user + '_' +  str(time.time())
 
 
-        if strhtml.find('t have enough Neopoints'):
+        if strhtml.find('t have enough Neopoints') > 1:
             return 1
 
-        if strhtml.find('Your Neopet has been healed'):
+        if strhtml.find('Your Neopet has been healed') > 1:
             #Not worth logging
             return 1
 
@@ -320,7 +338,7 @@ class dailys:
         html = self.acc.post("http://www.neopets.com/desert/sc/kiosk.phtml" , postdata ,"http://www.neopets.com/desert/sc/kiosk.phtml")
         self.nextscratchtime = time.time() + 14400
         self.settingsmanager.setvalue("timecache","nextscratchtime" , self.nextscratchtime  )
-        if html.find('even get a booby prize!'):
+        if html.find('even get a booby prize!') > 1:
 
             self.loghandler.writestringtofile(self.acc.user,'Scratch buyer - got a Scorched Treasure Scratchcard',0)
             return 1
@@ -334,12 +352,20 @@ class dailys:
 
         self.writestringtofile(filename,html)
 
-        #print html
+
+    def process_springs(self):
+        postdata = {'type' : 'heal'}
+        html = self.acc.post('http://www.neopets.com/faerieland/springs.phtml',postdata,'http://www.neopets.com/faerieland/springs.phtml')
+        print 'Healing springs'
+        if html.find('fully restored yet') > 1: # Not ready yet
+            return
+        filename = "healing" + self.acc.user + '_' +  str(time.time())
 
 
+        self.writestringtofile(filename,html)
     def process_scratchcard(self):
         #Todo , add some logic here to ranomize card type
-        print self.scratch_on
+
         self.BuyDesertScratchCard()
 
 
@@ -353,7 +379,7 @@ class dailys:
         html = self.acc.post("http://www.neopets.com/games/giveaway/process_giveaway.phtml",postdata,"http://images.neopets.com/games/g905_v3_99390.swf")
         filename = "Qas" + self.acc.user + '_' +  str(time.time())
 
-        if html.find('ccess=0'): #Success=0 , log nothing
+        if html.find('ccess=0') > 1: #Success=0 , log nothing
             return 1
 
 
@@ -380,11 +406,11 @@ class dailys:
 
 
 
-        if html.find('this is not a winning spin'):
+        if html.find('this is not a winning spin') > 1:
             self.loghandler.writestringtofile(self.acc.user,'this is not a winning spin',0)
             return 1
 
-        if html.find('already had your free spin for today'):
+        if html.find('already had your free spin for today')> 1:
 
             return 1
 
@@ -407,11 +433,11 @@ class dailys:
             html = self.acc.get("http://www.neopets.com/winter/snowager2.phtml","http://www.neopets.com/winter/snowager.phtml")
 
             #Only when asleep...
-            if html.find('The Snowager moves slightly in its sleep'):
+            if html.find('The Snowager moves slightly in its sleep') > 1:
                 self.loghandler.writestringtofile(self.acc.user,'The Snowager moves slightly in its sleep , no prize',0)
                 return 1
 
-            if html.find(' and pick up a plush toy'):
+            if html.find(' and pick up a plush toy') > 1:
                 pos1 = html.find('from the pile ')
                 pos2 = html.find('<b>',pos1)
                 pos3 = html.find('</b>',pos2)
@@ -437,6 +463,11 @@ class dailys:
 
         if html.find('excitement for one day') > 1:#Already done , skip
             return 1
+        if html.find('definitely no treasure.') > 1:#No prize
+            return 1
+
+
+
 
 
         self.writestringtofile(filename,html)
@@ -458,7 +489,7 @@ class dailys:
          postdata = {"action": thekey}
          html = self.acc.post("http://www.neopets.com/pirates/anchormanagement.phtml" , postdata )
 
-         if html.find('Treasure Map Negg'):
+         if html.find('Treasure Map Negg') > 1:
             self.loghandler.writestringtofile(self.acc.user,'Anchor Management Grabbed Treasure Map Negg',0)
             return 1
 
@@ -471,7 +502,7 @@ class dailys:
         print "Checking tombola"
 
         html = self.acc.get("http://www.neopets.com/island/tombola2.phtml","http://www.neopets.com/island/tombola.phtml")
-        if html.find('even get a booby prize!'):
+        if html.find('even get a booby prize!') > 1:
             self.loghandler.writestringtofile(self.acc.user,'Tombola - no win :(',0)
             return 1
 
@@ -485,7 +516,7 @@ class dailys:
             print "Coltzans Shrine"
 
             html = self.acc.get("http://www.neopets.com/desert/shrine.phtml?type=approach","http://www.neopets.com/desert/shrine.phtml")
-            if html.find(' feels faster'):
+            if html.find(' feels faster') > 1:
                 self.loghandler.writestringtofile(self.acc.user,'Coltzans shrine - Advanced pet speed',1)
                 return 1
             filename = "shrine" + str(time.time())
@@ -526,7 +557,7 @@ class dailys:
 
 
     def process_fishing(self,mobilehandler):
-        print "getting usernames"
+        print "getting petnames for fishing.."
         userpets = mobilehandler.getpetlist()
         for pet in userpets:
             petname= pet['name']

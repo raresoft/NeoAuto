@@ -36,9 +36,21 @@ class bankmanager:
 
     def withdrawnp(self,amount):
 
-        postdata = {'type' : 'withdraw' , 'amount' : str(amount)}
-       # print postdata
-        self.acc.post('http://www.neopets.com/process_bank.phtml',postdata,'http://www.neopets.com/bank.phtml')
+
+
+
+
+       html1=self.acc.get('http://www.neopets.com/bank.phtml') #We use this to see if a pin is set
+       postdata={}
+       if html1.find('Enter your') > 1:
+            postdata = {'type' : 'withdraw' , 'amount' : str(amount) , 'pin' : self.acc.neopin}
+       else:
+            #no pin set
+            postdata = {'type' : 'withdraw' , 'amount' : str(amount)}
+
+
+
+       self.acc.post('http://www.neopets.com/process_bank.phtml',postdata,'http://www.neopets.com/bank.phtml')
 
     def checknpbalance(self):
         #Check players current np is more than minamum....
