@@ -36,6 +36,7 @@ from classes.mobileservices import mobileservices
 from classes.nomobileservices import nomobileservices
 from classes.hotel import hotel
 from classes.battle import battle
+from classes.checkNST import getNST
 
 
 
@@ -61,6 +62,8 @@ neouser = "" #Neopets username
 neopass = "" #Neopets password
 neopin = "" #Neopets pin number (if used , leave as "" if not used)
 proxy = "" #localhost:8888 or 123.123.123.123:8080 ect - "" for none
+NSToffset = 700 #How many hours AHEAD of your system time is NST, in format HHMM
+                # e.g. 700 = 7 hours ahead. This stops the habi bot during maintenance hours
 
 if neouser == "":
     #Todo add a user input option here if neouser not set
@@ -224,8 +227,13 @@ while test ==1:
 
 
         if habihander.habi_on == 'on':
-           habihander.DoLoop()
-           time.sleep(30)
+           curNST = getNST(NSToffset)
+           if curNST > 195 and curNST < 405:
+              print "Doing nothing - habi maintenance hours \n"
+              time.sleep(30)
+           else:
+              habihander.DoLoop()
+              time.sleep(30)
 
  #   except:
  #       time.sleep(10)
