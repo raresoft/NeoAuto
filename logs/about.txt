@@ -1,0 +1,1 @@
+This folder saves logs for known results , if a result is not known its saved to /snapshots/

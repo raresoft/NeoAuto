@@ -17,6 +17,11 @@
 #Infamous Joe - Work on altador plot chart finder (bot uses cks chart finder)
 #Zach - Work on altador plot chart finder(bot uses cks chart finder)
 ######################################################Imports######################################################
+
+
+
+
+
 import urllib2, re
 from cookielib import CookieJar
 from urllib import urlencode
@@ -36,7 +41,7 @@ from classes.mobileservices import mobileservices
 from classes.nomobileservices import nomobileservices
 from classes.hotel import hotel
 from classes.battle import battle
-from classes.checkNST import getNST
+from classes.nsthandler import nsthandler
 
 
 
@@ -50,6 +55,7 @@ from classes.autotrainer import autotrainer
 from classes.avatar import avatar
 from classes.gamerunner  import gamerunner
 from classes.habi import habi
+from classes.nsthandler import nsthandler
 #from classes.nq2 import nq2
 ######################################################End Imports##################################################
 config1 = ConfigParser.RawConfigParser()
@@ -62,8 +68,6 @@ neouser = "" #Neopets username
 neopass = "" #Neopets password
 neopin = "" #Neopets pin number (if used , leave as "" if not used)
 proxy = "" #localhost:8888 or 123.123.123.123:8080 ect - "" for none
-NSToffset = 700 #How many hours AHEAD of your system time is NST, in format HHMM
-                # e.g. 700 = 7 hours ahead. This stops the habi bot during maintenance hours
 
 if neouser == "":
     #Todo add a user input option here if neouser not set
@@ -108,6 +112,8 @@ def dologin(debugmode=1): #Debug mode is optional and set to 1 by default
 acc = dologin(Dodebugmode) #Do login trys to login and returns a new instance of NeoAccount
 
 
+nsthandler = nsthandler(acc)
+
 
 settingsmanager = settings(acc.user) #Load settings for this account , store data/class in sessionmanager
 habihander = habi(acc,pyamfhandler,proxy,settingsmanager) #Setup habi hander module
@@ -147,15 +153,22 @@ while test ==1:
   #  continue
 #
 
- #   try:
+    try:
         if not dailyshander.DoTick(mobilehandler) == 0:
             continue #Done something so exit
 
         if traininghandler.trainingon == 'on':
             if (time.time() - float(traininghandler.lasttraintime) > 180): #Auto train check every 3 mins
                 traininghandler.dotick()
+                time.sleep(10)
                 continue #Done something so exit
 
+
+        if bankhandler.checknp_on == 'on':
+            if (time.time() - float(bankhandler.lastbanktime) > 900): #Auto check cash on hand every half hour
+                bankhandler.checknpbalance()
+                time.sleep(10)
+                continue #Done something so exit
 
 
 
@@ -163,6 +176,7 @@ while test ==1:
         if hotelmanager.autohotel_on == 'on':
             if (time.time() - float(hotelmanager.lasthoteltime) > 86400): #Auto hotel check every day
                 hotelmanager.dotick()
+                time.sleep(10)
                 continue #Done something so exit
 
         if battlemanager.battle_on == 'on':
@@ -170,6 +184,7 @@ while test ==1:
                 if battlemanager.dotick() == 1: #Won battle
                     nextbattletime = time.time() + 300
                     settingsmanager.setvalue("timecache","nextbattletime" , nextbattletime )
+                    time.sleep(10)
                     continue #Done something so exit
                     print 'Battle manager'
 
@@ -191,30 +206,33 @@ while test ==1:
         if inventorymanager.invenotrymanageron == 'on':
             if (time.time() - float(inventorymanager.lastsdbticktime) > 900): #Invenotry manager check every half hour
                 inventorymanager.Depositall()
-
+                time.sleep(10)
                 continue #Done something so exit
 
 
         if shopmanager.withdrawtill == 'on':
             if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
                 shopmanager.checktill()
+                time.sleep(10)
                 continue #Done something so exit
 
 
         if shopmanager.withdrawtill == 'on':
             if (time.time() - float(shopmanager.lasttilltime) > 300): #till check every 5 mins
                 shopmanager.checktill()
+                time.sleep(10)
                 continue #Done something so exit
         if shopmanager.autoprice_on == 'on':
             if (time.time() - float(shopmanager.lastpricetime) > 900): #price items every half hour
                 shopmanager.priceitems()
+                time.sleep(10)
                 continue #Done something so exit
 
 
         if avatarhandler.avataron == 'on':
             if (time.time() - float(avatarhandler.lastavatartime) > 300): #grab a avatar every 5 mins
                 avatarhandler.getavatar()
-
+                time.sleep(10)
                 continue #Done something so exit
 
 
@@ -227,15 +245,19 @@ while test ==1:
 
 
         if habihander.habi_on == 'on':
-           curNST = getNST(NSToffset)
-           if curNST > 195 and curNST < 405:
-              print "Doing nothing - habi maintenance hours \n"
-              time.sleep(30)
+           datetime  =  nsthandler.getreadabletime() #Returns a list date / time e.g : ['2014:05:19', '14:17:03']
+           thetime = datetime[1] #Second object = time
+           splittime = thetime.split(':') #Split the time at :
+           currenthour = splittime[0] #First object is the hour (24 hour clock , so 02 = 2am , 14 = 2pm ect)
+           if currenthour == '02' or currenthour == '03':
+               print "Skipping habi for now due to maintence (2am - 4am) , current nst is : " + thetime
+               time.sleep(30)
            else:
-              habihander.DoLoop()
-              time.sleep(30)
+               habihander.DoLoop()
+               time.sleep(30)
 
- #   except:
- #       time.sleep(10)
-   #     continue
-#
+    except:
+        time.sleep(10)
+        continue
+
+
