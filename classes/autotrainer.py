@@ -128,7 +128,7 @@ class autotrainer:
                             statushtml = self.acc.post('http://www.neopets.com/pirates/process_academy.phtml',postdata,'http://www.neopets.com/pirates/academy.phtml?type=courses',postdata)
                             print  self.mobilehandler.activepetname + ' Starting a course'
 
-                        if trainstat == 'stenghth':
+                        if trainstat == 'strength':
                             print petname + ' is not on a course , starting course in ' + self.trainingstat
 
                             postdata = {'type' : 'start',
@@ -138,12 +138,20 @@ class autotrainer:
                             statushtml = self.acc.post('http://www.neopets.com/pirates/process_academy.phtml',postdata,'http://www.neopets.com/pirates/academy.phtml?type=courses',postdata)
                             print  self.mobilehandler.activepetname + ' Starting a course'
 
+                        if trainstat == 'defence':
+                            print petname + ' is not on a course , starting course in ' + self.trainingstat
 
+                            postdata = {'type' : 'start',
+                                        'course_type' : 'Defence',
+                                        'pet_name' : str(petname)}
 
+                            statushtml = self.acc.post('http://www.neopets.com/pirates/process_academy.phtml',postdata,'http://www.neopets.com/pirates/academy.phtml?type=courses',postdata)
+                            print  self.mobilehandler.activepetname + ' Starting a course'
+                            
                         if trainstat == 'agility':
                             print petname + ' is not on a course , starting course in ' + self.trainingstat
 
-                            postdata = {'type' : 'defence',
+                            postdata = {'type' : 'start',
                                         'course_type' : 'Agility',
                                         'pet_name' : str(petname)}
 
@@ -152,7 +160,7 @@ class autotrainer:
                         if trainstat == 'endurance':
                             print petname + ' is not on a course , starting course in ' + self.trainingstat
 
-                            postdata = {'type' : 'defence',
+                            postdata = {'type' : 'start',
                                         'course_type' : 'Endurance',
                                         'pet_name' : str(petname)}
 
