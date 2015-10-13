@@ -173,7 +173,6 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=6&' + graburl1
 
@@ -188,7 +187,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=9&' + graburl1
 
@@ -207,7 +206,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=2&' + graburl1
 
@@ -225,7 +224,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=4&' + graburl1
 
@@ -242,7 +241,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+    
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=11&' + graburl1
 
@@ -264,7 +263,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=7&' + graburl1
 
@@ -283,7 +282,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+        
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=5&' + graburl1
 
@@ -300,7 +299,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+        
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=10&' + graburl1
 
@@ -321,7 +320,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+        
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=3&' + graburl1
 
@@ -341,7 +340,7 @@ class altador:
 
         pos1=html2.find('look_up=')
         pos2 = self.acc.cleanhtml.find("'",pos1)
-        print self.acc.cleanhtml
+        
         graburl1 = html2[pos1:pos2]
         graburl ='http://www.neopets.com/altador/hallofheroes.phtml?view_statue_id=8&' + graburl1
 
@@ -672,11 +671,11 @@ class altador:
         if self.atadorstage == '5.34':
                 print 'Altador bot advancing to stage 5.35'
 
-                html =self.acc.get('http://neopets.com/altador/tomb.phtml','http://thedailyneopets.com/altador-plot/part5/')
+                html =self.acc.get('http://www.neopets.com/altador/tomb.phtml','http://thedailyneopets.com/altador-plot/part5/')
                 pos1=html.find('acvhv=')
                 pos2 = html.find('"',pos1)
                 graburl1 = html[pos1:pos2]
-                graburl = 'http://neopets.com/altador/tomb.phtml?' + graburl1
+                graburl = 'http://www.neopets.com/altador/tomb.phtml?' + graburl1
 
 
 
@@ -741,7 +740,7 @@ class altador:
                 theret = self.detectpostion()
                 if not theret == '6.43': #We should have 5.34  here , if not passed code failed so go back to stage 6.43
                     self.settingsmanager.setvalue('misc','altador_stage', '5.34')
-                    self.atadorstage = '5.34 '
+                    self.atadorstage = '5.34'
                     return
 
 
@@ -749,7 +748,7 @@ class altador:
         if self.atadorstage == '6.43':
                 print 'Altador bot advancing to stage 6.47'
 
-                html =self.acc.get('http://neopets.com/altador/farm.phtml','http://thedailyneopets.com/altador-plot/part6/')
+                html =self.acc.get('http://www.neopets.com/altador/farm.phtml','http://thedailyneopets.com/altador-plot/part6/')
 
 
                 pos1=html.find('windmill=')

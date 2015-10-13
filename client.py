@@ -36,7 +36,6 @@ from pyamf.remoting.client import RemotingService #Pyamf class used for amf requ
 from classes.NeoAccount import NeoAccount
 from classes.settings import settings
 from classes.dailys import dailys
-from classes.habi import habi
 from classes.mobileservices import mobileservices
 from classes.nomobileservices import nomobileservices
 from classes.hotel import hotel
@@ -54,7 +53,6 @@ from classes.bankmanager import bankmanager
 from classes.autotrainer import autotrainer
 from classes.avatar import avatar
 from classes.gamerunner  import gamerunner
-from classes.habi import habi
 from classes.nsthandler import nsthandler
 #from classes.nq2 import nq2
 ######################################################End Imports##################################################
@@ -116,7 +114,6 @@ nsthandler = nsthandler(acc)
 
 
 settingsmanager = settings(acc.user) #Load settings for this account , store data/class in sessionmanager
-habihander = habi(acc,pyamfhandler,proxy,settingsmanager) #Setup habi hander module
 
 depositfile =  settingsmanager.getvalue("Settings","depositlist") #Deposit list items
 doaltador =settingsmanager.getvalue("misc","altador_on") #Altador on off switch
@@ -244,19 +241,10 @@ while test ==1:
 
 
 
-        if habihander.habi_on == 'on':
-           datetime  =  nsthandler.getreadabletime() #Returns a list date / time e.g : ['2014:05:19', '14:17:03']
-           thetime = datetime[1] #Second object = time
-           splittime = thetime.split(':') #Split the time at :
-           currenthour = splittime[0] #First object is the hour (24 hour clock , so 02 = 2am , 14 = 2pm ect)
-           if currenthour == '02' or currenthour == '03':
-               print "Skipping habi for now due to maintence (2am - 4am) , current nst is : " + thetime
-               time.sleep(30)
-           else:
-               habihander.DoLoop()
-               time.sleep(30)
+
 
     except:
+        print "Except"
         time.sleep(10)
         continue
 

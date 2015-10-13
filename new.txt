@@ -1,0 +1,3 @@
+Removed habi code as game is currently diabled
+Added check on bank functions - Is account activated
+Fixed typo in altador plot completer that got bot stuck at 5.34

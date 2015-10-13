@@ -20,9 +20,12 @@ class bankmanager:
             "account_type" : '0',
             "initial_deposit" : '1',
             }
-            self.acc.post('http://www.neopets.com/process_bank.phtml',postdata,'http://www.neopets.com/bank.phtml')
-
-
+            html=self.acc.post('http://www.neopets.com/process_bank.phtml',postdata,'http://www.neopets.com/bank.phtml')
+            if (html.find("Activation Code!") > 1):
+                #Account is not activated , so diasble bank functions
+                print "Bank Account cannot be created , you must activate your account first! Bank functions have been disabled"
+                self.checknp_on = "off"
+            
     def deopsitall(self):
         currentnp = self.mobilehandler.getnp()
         self.depositnp(currentnp)
