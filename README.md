@@ -5,7 +5,9 @@ Automates neopets games using string manipulation.
 
 
 Required
-Download python 2.7 (Windows , Pc , Ios , Android , mac)
+Download python 2.7.9 (anything above 2.7 will work) (Windows , Pc , Ios , Android , mac)
+
+http://python.org/download
 
 
 How to use:
