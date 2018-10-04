@@ -4,8 +4,8 @@ NeoAuto
 Automates neopets games using string manipulation.
 
 
-Required
-Download python 2.7 (Windows , Pc , Ios , Android , mac)
+Required Downloads:
+Python 2.7 (https://www.python.org/downloads/release/python-2715/) (Windows, Linux, Mac)
 
 
 How to use:
